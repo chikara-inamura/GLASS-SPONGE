@@ -442,6 +442,7 @@ public class Script_Instance : GH_ScriptInstance
             lsP.Clear();
 
           }
+
         }
       }
     }
@@ -470,6 +471,7 @@ public class Script_Instance : GH_ScriptInstance
     List<Mesh> lsM_Out = new List<Mesh>();
     List<Point3d> lsP_Out = new List<Point3d>();
     double dAngPosRad = -((double) iColumn + 1.0) * 2.0 * dAngStpRad;
+
 
     //
     // Middle Segments
@@ -709,10 +711,10 @@ public class Script_Instance : GH_ScriptInstance
 
     }
 
-    //
-    // Top End
-    //
-    if ( ((iType == 1) && (iLine + 1 == 2 * iNumV))
+      //
+      // Top End
+      //
+    else if ( ((iType == 1) && (iLine + 1 == 2 * iNumV))
       || ((iType == 4) && (iLine + 1 == 2 * iNumV))
       || ((iType == 5) && (iLine + 1 == 2 * iNumV))
       || ((iType == 15) && (iLine + 1 == 2 * iNumV))
@@ -776,29 +778,6 @@ public class Script_Instance : GH_ScriptInstance
       lsP_Out.Add(PMIBA12);
       lsP_Out.Add(PMIBA13);
 
-      /*
-      // Mesh Top 1
-      Mesh MT11 = new Mesh();
-      MT11.Vertices.Add(PMOC11);
-      MT11.Vertices.Add(PMIT11);
-      MT11.Vertices.Add(PMITB11);
-      MT11.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MT11);
-      // Mesh Top 2
-      Mesh MT12 = new Mesh();
-      MT12.Vertices.Add(PMOC11);
-      MT12.Vertices.Add(PMOC12);
-      MT12.Vertices.Add(PMIT11);
-      MT12.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MT12);
-      // Mesh Top 2
-      Mesh MT12 = new Mesh();
-      MT12.Vertices.Add(PMOC11);
-      MT12.Vertices.Add(PMOC12);
-      MT12.Vertices.Add(PMIT11);
-      MT12.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MT12);
-      */
       // Mesh Top 1
       Mesh MT11 = new Mesh();
       MT11.Vertices.Add(PMOC11);
@@ -830,67 +809,6 @@ public class Script_Instance : GH_ScriptInstance
 
       if (bCap == true)
       {
-        /*
-        // Mesh Top 1 Back
-        Mesh MT11B = new Mesh();
-        MT11B.Vertices.Add(PMIC11);
-        MT11B.Vertices.Add(PMITB11);
-        MT11B.Vertices.Add(PMIT11);
-        MT11B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT11B);
-        // Mesh Top 2 Back
-        Mesh MT12B = new Mesh();
-        MT12B.Vertices.Add(PMIC11);
-        MT12B.Vertices.Add(PMIT11);
-        MT12B.Vertices.Add(PMIC12);
-        MT12B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT12B);
-        // Mesh Bottom 1 Back
-        Mesh MB11B = new Mesh();
-        MB11B.Vertices.Add(PMIC11);
-        MB11B.Vertices.Add(PMIB13);
-        MB11B.Vertices.Add(PMIB11);
-        MB11B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MB11B);
-        // Mesh Bottom 2 Back
-        Mesh MB12B = new Mesh();
-        MB12B.Vertices.Add(PMIC11);
-        MB12B.Vertices.Add(PMIC12);
-        MB12B.Vertices.Add(PMIB13);
-        MB12B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MB12B);
-
-        // Capping Faces
-        // Mesh Top 1 Side
-        Mesh MT11S = new Mesh();
-        MT11S.Vertices.Add(PMIC11);
-        MT11S.Vertices.Add(PMOC11);
-        MT11S.Vertices.Add(PMITB11);
-        MT11S.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT11S);
-        // Mesh Bottom 1 Side
-        Mesh MB11S = new Mesh();
-        MB11S.Vertices.Add(PMIC11);
-        MB11S.Vertices.Add(PMIB11);
-        MB11S.Vertices.Add(PMOC11);
-        MB11S.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MB11S);
-        // Mesh Top 2 Side
-        Mesh MT12S = new Mesh();
-        MT12S.Vertices.Add(PMIC12);
-        MT12S.Vertices.Add(PMIT11);
-        MT12S.Vertices.Add(PMOC12);
-        MT12S.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT12S);
-        // Mesh Bottom 2 Side
-        Mesh MB12S = new Mesh();
-        MB12S.Vertices.Add(PMIC12);
-        MB12S.Vertices.Add(PMOC12);
-        MB12S.Vertices.Add(PMIB13);
-        MB12S.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MB12S);
-        */
-
         // Mesh Top 1 Back
         Mesh MT11B = new Mesh();
         MT11B.Vertices.Add(PMIC11);
@@ -962,10 +880,10 @@ public class Script_Instance : GH_ScriptInstance
 
     }
 
-    //
-    // Bottom End
-    //
-    if ( (iType == 3)
+      //
+      // Bottom End
+      //
+    else if ( (iType == 3)
       || (iType == 8)
       || (iType == 9)
       || (iType == 13)
@@ -1117,6 +1035,46 @@ public class Script_Instance : GH_ScriptInstance
       MJ.UnifyNormals();
       lsM_Out.Clear();
       lsM_Out.Add(MJ);
+
+      // Fillling Block
+      if (bCap == true)
+      {
+        List<Mesh> lsMF = new List<Mesh>();
+        //  Mesh Top
+        Mesh MF11T = new Mesh();
+        MF11T.Vertices.Add(PMOC12);
+        MF11T.Vertices.Add(PMIB13);
+        MF11T.Vertices.Add(PMIC11);
+        MF11T.Faces.AddFace(0, 1, 2);
+        lsMF.Add(MF11T);
+        //  Mesh Front
+        Mesh MF11F = new Mesh();
+        MF11F.Vertices.Add(PMOC12);
+        MF11F.Vertices.Add(PMIC11);
+        MF11F.Vertices.Add(PMIB12);
+        MF11F.Faces.AddFace(0, 1, 2);
+        lsMF.Add(MF11F);
+        //  Mesh Bottom
+        Mesh MF11B = new Mesh();
+        MF11B.Vertices.Add(PMOC12);
+        MF11B.Vertices.Add(PMIB12);
+        MF11B.Vertices.Add(PMIB13);
+        MF11B.Faces.AddFace(0, 1, 2);
+        lsMF.Add(MF11B);
+        //  Mesh Rear
+        Mesh MF11R = new Mesh();
+        MF11R.Vertices.Add(PMIC11);
+        MF11R.Vertices.Add(PMIB12);
+        MF11R.Vertices.Add(PMIB13);
+        MF11R.Faces.AddFace(0, 1, 2);
+        lsMF.Add(MF11R);
+        // Join Meshes
+        Mesh MFJ = new Mesh();
+        MFJ.Append(lsMF);
+        MFJ.UnifyNormals();
+        lsM_Out.Add(MFJ);
+        lsMF.Clear();
+      }
     }
 
     lsM = lsM_Out;
@@ -1366,10 +1324,10 @@ public class Script_Instance : GH_ScriptInstance
       lsM_Out.Add(MJ);
     }
 
-    //
-    // Top End
-    //
-    if ( (iType == 5) || (iType == 7) || (iType == 8) || (iType == 12)
+      //
+      // Top End
+      //
+    else if ( (iType == 5) || (iType == 7) || (iType == 8) || (iType == 12)
       || ((iType == 2) && (iLine + 1 == 2 * iNumV))
       || ((iType == 3) && (iLine + 1 == 2 * iNumV))
       || ((iType == 6) && (iLine + 1 == 2 * iNumV))
@@ -1433,104 +1391,7 @@ public class Script_Instance : GH_ScriptInstance
       lsP_Out.Add(PMIBA12);
       lsP_Out.Add(PMIBA13);
 
-      /*
       // Mesh Top 1
-      Mesh MT11 = new Mesh();
-      MT11.Vertices.Add(PMOC11);
-      MT11.Vertices.Add(PMIT11);
-      MT11.Vertices.Add(PMITB11);
-      MT11.Faces.AddFace(0, 2, 1);
-      lsM_Out.Add(MT11);
-      // Mesh Top 2
-      Mesh MT12 = new Mesh();
-      MT12.Vertices.Add(PMOC11);
-      MT12.Vertices.Add(PMOC12);
-      MT12.Vertices.Add(PMIT11);
-      MT12.Faces.AddFace(0, 2, 1);
-      lsM_Out.Add(MT12);
-      // Mesh Bottom 1
-      Mesh MB11 = new Mesh();
-      MB11.Vertices.Add(PMOC11);
-      MB11.Vertices.Add(PMIB11);
-      MB11.Vertices.Add(PMIBA11);
-      MB11.Faces.AddFace(0, 2, 1);
-      lsM_Out.Add(MB11);
-      // Mesh Bottom 2
-      Mesh MB12 = new Mesh();
-      MB12.Vertices.Add(PMOC11);
-      MB12.Vertices.Add(PMIBA11);
-      MB12.Vertices.Add(PMOC12);
-      MB12.Faces.AddFace(0, 2, 1);
-      lsM_Out.Add(MB12);
-
-      if (bCap == true)
-      {
-        // Mesh Top 1 Back
-        Mesh MT11B = new Mesh();
-        MT11B.Vertices.Add(PMIC11);
-        MT11B.Vertices.Add(PMITB11);
-        MT11B.Vertices.Add(PMIT11);
-        MT11B.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT11B);
-        // Mesh Top 2 Back
-        Mesh MT12B = new Mesh();
-        MT12B.Vertices.Add(PMIC11);
-        MT12B.Vertices.Add(PMIT11);
-        MT12B.Vertices.Add(PMIC12);
-        MT12B.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT12B);
-        // Mesh Bottom 1 Back
-        Mesh MB11B = new Mesh();
-        MB11B.Vertices.Add(PMIC11);
-        MB11B.Vertices.Add(PMIB13);
-        MB11B.Vertices.Add(PMIB11);
-        MB11B.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MB11B);
-        // Mesh Bottom 2 Back
-        Mesh MB12B = new Mesh();
-        MB12B.Vertices.Add(PMIC11);
-        MB12B.Vertices.Add(PMIC12);
-        MB12B.Vertices.Add(PMIB13);
-        MB12B.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MB12B);
-
-        // Capping Faces
-
-        // Mesh Top 1 Side
-        Mesh MT11S = new Mesh();
-        MT11S.Vertices.Add(PMIC11);
-        MT11S.Vertices.Add(PMOC11);
-        MT11S.Vertices.Add(PMITB11);
-        MT11S.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT11S);
-
-        // Mesh Bottom 1 Side
-        Mesh MB11S = new Mesh();
-        MB11S.Vertices.Add(PMIC11);
-        MB11S.Vertices.Add(PMIB11);
-        MB11S.Vertices.Add(PMOC11);
-        MB11S.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MB11S);
-
-        // Mesh Top 2 Side
-        Mesh MT12S = new Mesh();
-        MT12S.Vertices.Add(PMIC12);
-        MT12S.Vertices.Add(PMIT11);
-        MT12S.Vertices.Add(PMOC12);
-        MT12S.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT12S);
-
-        // Mesh Bottom 2 Side
-        Mesh MB12S = new Mesh();
-        MB12S.Vertices.Add(PMIC12);
-        MB12S.Vertices.Add(PMOC12);
-        MB12S.Vertices.Add(PMIB13);
-        MB12S.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MB12S);
-      }
-      */
-
-       // Mesh Top 1
       Mesh MT11 = new Mesh();
       MT11.Vertices.Add(PMOC11);
       MT11.Vertices.Add(PMITB12);
@@ -1633,10 +1494,10 @@ public class Script_Instance : GH_ScriptInstance
       lsM_Out.Add(MJ);
     }
 
-    //
-    // Bottom End
-    //
-    if ( (iType == 4)
+      //
+      // Bottom End
+      //
+    else if ( (iType == 4)
       || (iType == 9)
       || (iType == 10)
       || (iType == 14)
