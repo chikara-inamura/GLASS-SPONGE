@@ -55,6 +55,25 @@ public class Script_Instance : GH_ScriptInstance
   private void RunScript(List<string> X, ref object LBC, ref object MBC, ref object LHL, ref object LHR, ref object LSL, ref object LSR, ref object MHL, ref object MHR, ref object PHL, ref object PHR)
   {
 
+    // DEBUG PARAMETER
+    List<int> lsIDX = new List<int>();
+    lsIDX.Add(1); // idX = 0;
+    lsIDX.Add(1); // idX = 1;
+    lsIDX.Add(1); // idX = 2;
+    lsIDX.Add(1); // idX = 3;
+    lsIDX.Add(1); // idX = 4;
+    lsIDX.Add(1); // idX = 5;
+    lsIDX.Add(1); // idX = 6;
+    lsIDX.Add(1); // idX = 7;
+    lsIDX.Add(1); // idX = 8;
+    lsIDX.Add(1); // idX = 9;
+    lsIDX.Add(1); // idX = 10;
+    lsIDX.Add(1); // idX = 11;
+    lsIDX.Add(1); // idX = 12;
+    lsIDX.Add(1); // idX = 13;
+    lsIDX.Add(1); // idX = 14;
+    lsIDX.Add(1); // idX = 15;
+
     // INPUT PARAMETERS
     bool bDiag1 = false;
     bool bDiag2 = true;
@@ -391,58 +410,100 @@ public class Script_Instance : GH_ScriptInstance
     {
       int k = 0;
       int u = 0;
+
+      //
+      // Loop Row
+      //
+
       for (i = 0; i < iNumV * 2; i++)
       {
+
+        //
         // in case of matrix shorter than the sea sponge, pattern needs to be repeated, that's why i>=32,u=i-32*int(i/32) and the condition on j>=32
-        if (i >= 32){ u = i - 32 * (int) (i / 32); }
-        else { u = i; }
-        for (j = 0; j < iNumH; j++)
+        //
+
+        if (i >= 32)
         {
-          if (j >= 32){ k = j - 32 * (int) (j / 32); }
-          if (j < 32){ k = j; }
+          u = i - 32 * (int) (i / 32);
+        }
+        else
+        {
+          u = i;
+        }
+
+        //
+        // Loop Column
+        //
+
+        for (j = 0; j < iNumH; j++)
+          // for(j = 0; j < 1; j++)
+        {
+          if (j >= 32){
+            k = j - 32 * (int) (j / 32);
+          }
+          if (j < 32){
+            k = j;
+          }
           int idX = (int) dX[u][k];
           List<Mesh> lsM = new List<Mesh>();
           List<Point3d> lsP = new List<Point3d>();
 
           if ( (idX == 1) || (idX == 11) || (idX == 13) )
           {
-            lsL_HL.AddRange(lsL_HelixLeft(i, j, idX, iNumV, dAngStpRad, dR1, dR2, dSpace, bCap, out lsM, out lsP));
-            lsL_SL.AddRange(lsL_SupportLeft(i, j, idX, iNumV, dAngStpRad, dR1, dR2, dSpace));
-            lsM_HL.AddRange(lsM);
-            lsP_HL.AddRange(lsP);
-            lsM.Clear();
-            lsP.Clear();
+            if(lsIDX[idX] == 1)
+            {
+              if (bLeft == true)
+              {
+                lsL_HL.AddRange(lsL_HelixLeft(i, j, idX, iNumV, dAngStpRad, dR1, dR2, dSpace, bCap, out lsM, out lsP));
+                lsL_SL.AddRange(lsL_SupportLeft(i, j, idX, iNumV, dAngStpRad, dR1, dR2, dSpace));
+                lsM_HL.AddRange(lsM);
+                lsP_HL.AddRange(lsP);
+                lsM.Clear();
+                lsP.Clear();
+              }
+            }
           }
 
-          if ( (idX == 2) || (idX == 12) || (idX == 14) )
+          else if ( (idX == 2) || (idX == 12) || (idX == 14) )
           {
-            lsL_HR.AddRange(lsL_HelixRight(i, j, idX, iNumV, dAngStpRad, dR1, dR2, dSpace, bCap, out lsM, out lsP));
-            lsL_SR.AddRange(lsL_SupportRight(i, j, idX, iNumV, dAngStpRad, dR1, dR2, dSpace));
-            lsM_HR.AddRange(lsM);
-            lsP_HR.AddRange(lsP);
-            lsM.Clear();
-            lsP.Clear();
+            if(lsIDX[idX] == 1)
+            {
+              if (bRight == true)
+              {
+                lsL_HR.AddRange(lsL_HelixRight(i, j, idX, iNumV, dAngStpRad, dR1, dR2, dSpace, bCap, out lsM, out lsP));
+                lsL_SR.AddRange(lsL_SupportRight(i, j, idX, iNumV, dAngStpRad, dR1, dR2, dSpace));
+                lsM_HR.AddRange(lsM);
+                lsP_HR.AddRange(lsP);
+                lsM.Clear();
+                lsP.Clear();
+              }
+            }
           }
 
-          if ( (idX == 3) || (idX == 4) || (idX == 5) || (idX == 6) || (idX == 7) || (idX == 8) || (idX == 9) || (idX == 10) || (idX == 15) )
+          else if ( (idX == 3) || (idX == 4) || (idX == 5) || (idX == 6) || (idX == 7) || (idX == 8) || (idX == 9) || (idX == 10) || (idX == 15) )
           {
-
-            lsL_HL.AddRange(lsL_HelixLeft(i, j, idX, iNumV, dAngStpRad, dR1, dR2, dSpace, bCap, out lsM, out lsP));
-            lsL_SL.AddRange(lsL_SupportLeft(i, j, idX, iNumV, dAngStpRad, dR1, dR2, dSpace));
-            lsM_HL.AddRange(lsM);
-            lsP_HL.AddRange(lsP);
-            lsM.Clear();
-            lsP.Clear();
-
-            lsL_HR.AddRange(lsL_HelixRight(i, j, idX, iNumV, dAngStpRad, dR1, dR2, dSpace, bCap, out lsM, out lsP));
-            lsL_SR.AddRange(lsL_SupportRight(i, j, idX, iNumV, dAngStpRad, dR1, dR2, dSpace));
-            lsM_HR.AddRange(lsM);
-            lsP_HR.AddRange(lsP);
-            lsM.Clear();
-            lsP.Clear();
-
+            if(lsIDX[idX] == 1)
+            {
+              if (bLeft == true)
+              {
+                lsL_HL.AddRange(lsL_HelixLeft(i, j, idX, iNumV, dAngStpRad, dR1, dR2, dSpace, bCap, out lsM, out lsP));
+                lsL_SL.AddRange(lsL_SupportLeft(i, j, idX, iNumV, dAngStpRad, dR1, dR2, dSpace));
+                lsM_HL.AddRange(lsM);
+                lsP_HL.AddRange(lsP);
+                lsM.Clear();
+                lsP.Clear();
+              }
+              if (bRight == true)
+              {
+                lsL_HR.AddRange(lsL_HelixRight(i, j, idX, iNumV, dAngStpRad, dR1, dR2, dSpace, bCap, out lsM, out lsP));
+                lsL_SR.AddRange(lsL_SupportRight(i, j, idX, iNumV, dAngStpRad, dR1, dR2, dSpace));
+                lsM_HR.AddRange(lsM);
+                lsP_HR.AddRange(lsP);
+                lsM.Clear();
+                lsP.Clear();
+              }
+            }
           }
-
         }
       }
     }
@@ -463,8 +524,19 @@ public class Script_Instance : GH_ScriptInstance
   // <Custom additional code> 
 
   //
+  // Debug Parameter
+  //
+
+  public bool bLeft = true;
+  public bool bRight = true;
+  public bool bTop = false;
+  public bool bMid = true;
+  public bool bBottom = true;
+
+  //
   // Helix Left
   //
+
   List<Line> lsL_HelixLeft(int iLine, int iColumn, int iType, int iNumV, double dAngStpRad, double dR1, double dR2, double dSpace, bool bCap, out List<Mesh> lsM, out List<Point3d> lsP) // iNumV = iNumV
   {
     List<Line> lsL_Return = new List<Line>();
@@ -472,1317 +544,1683 @@ public class Script_Instance : GH_ScriptInstance
     List<Point3d> lsP_Out = new List<Point3d>();
     double dAngPosRad = -((double) iColumn + 1.0) * 2.0 * dAngStpRad;
 
-
-    //
-    // Middle Segments
-    //
-    if ( ((iType == 1) && (iLine != 0)) || (iType == 4) || (iType == 5) || (iType == 15) )
+    if (
+      ((iType == 1) && (iLine != 0))
+      || (iType == 4)
+      || (iType == 5)
+      || (iType == 15)
+      )
     {
 
-      // Line
-      // Outer Center
-      Point3d P11 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
-      Point3d P12 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
-      Point3d P13 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
-      lsP_Out.Add(P11);
-      lsP_Out.Add(P12);
-      lsP_Out.Add(P13);
-      Line L11 = new Line(P11, P12);
-      Line L12 = new Line(P12, P13);
-      lsL_Return.Add(L11);
-      lsL_Return.Add(L12);
+      //
+      // Middle Segments
+      //
 
-      // Mesh
-      // Outer Center (Same as Helix Points)
-      Point3d PMOC11 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
-      Point3d PMOC12 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
-      Point3d PMOC13 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
-      lsP_Out.Add(PMOC11);
-      lsP_Out.Add(PMOC12);
-      lsP_Out.Add(PMOC13);
-      // Inner Center
-      Point3d PMIC11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
-      Point3d PMIC12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
-      Point3d PMIC13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIC11);
-      lsP_Out.Add(PMIC12);
-      lsP_Out.Add(PMIC13);
-      // Inner Top
-      Point3d PMIT11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 1.0 + 0.0 * dSpace);
-      Point3d PMIT12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 1.0 + 0.5 * dSpace);
-      Point3d PMIT13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIT11);
-      lsP_Out.Add(PMIT12);
-      lsP_Out.Add(PMIT13);
-      // Inner Top Before
-      Point3d PMITB11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 2.0 * dAngStpRad), (double) iLine + 1.0 - 1.0 * dSpace);
-      Point3d PMITB12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 1.0 * dAngStpRad), (double) iLine + 1.0 - 0.5 * dSpace);
-      Point3d PMITB13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 0.0 * dAngStpRad), (double) iLine + 1.0 - 0.0 * dSpace);
-      lsP_Out.Add(PMITB11);
-      lsP_Out.Add(PMITB12);
-      lsP_Out.Add(PMITB13);
-      // Inner Bottom
-      Point3d PMIB11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine - 1.0 + 0.0 * dSpace);
-      Point3d PMIB12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine - 1.0 + 0.5 * dSpace);
-      Point3d PMIB13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine - 1.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIB11);
-      lsP_Out.Add(PMIB12);
-      lsP_Out.Add(PMIB13);
-      // Inner Bottom After
-      Point3d PMIBA11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
-      Point3d PMIBA12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 3.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 3.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
-      Point3d PMIBA13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 4.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 4.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIBA11);
-      lsP_Out.Add(PMIBA12);
-      lsP_Out.Add(PMIBA13);
-
-      // Mesh Top 11
-      Mesh MT11 = new Mesh();
-      MT11.Vertices.Add(PMOC11);
-      MT11.Vertices.Add(PMOC12);
-      MT11.Vertices.Add(PMITB11);
-      MT11.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MT11);
-
-      // Mesh Top 12
-      Mesh MT12 = new Mesh();
-      MT12.Vertices.Add(PMOC12);
-      MT12.Vertices.Add(PMITB12);
-      MT12.Vertices.Add(PMITB11);
-      MT12.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MT12);
-
-      // Mesh Top 21
-      Mesh MT21 = new Mesh();
-      MT21.Vertices.Add(PMOC12);
-      MT21.Vertices.Add(PMOC13);
-      MT21.Vertices.Add(PMITB12);
-      MT21.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MT21);
-
-      // Mesh Top 22
-      Mesh MT22 = new Mesh();
-      MT22.Vertices.Add(PMOC13);
-      MT22.Vertices.Add(PMITB13);
-      MT22.Vertices.Add(PMITB12);
-      MT22.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MT22);
-
-      // Mesh Bottom 11
-      Mesh MB11 = new Mesh();
-      MB11.Vertices.Add(PMOC11);
-      MB11.Vertices.Add(PMIB11);
-      MB11.Vertices.Add(PMOC12);
-      MB11.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MB11);
-
-      // Mesh Bottom 12
-      Mesh MB12 = new Mesh();
-      MB12.Vertices.Add(PMOC12);
-      MB12.Vertices.Add(PMIB11);
-      MB12.Vertices.Add(PMIB12);
-      MB12.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MB12);
-
-      // Mesh Bottom 21
-      Mesh MB21 = new Mesh();
-      MB21.Vertices.Add(PMOC12);
-      MB21.Vertices.Add(PMOC13);
-      MB21.Vertices.Add(PMIB12);
-      MB21.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MB21);
-
-      // Mesh Bottom 22
-      Mesh MB22 = new Mesh();
-      MB22.Vertices.Add(PMOC13);
-      MB22.Vertices.Add(PMIB12);
-      MB22.Vertices.Add(PMIB13);
-      MB22.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MB22);
-
-      if (bCap == true)
+      if (bMid == true)
       {
-        // Mesh Top 11 Back
-        Mesh MT11B = new Mesh();
-        MT11B.Vertices.Add(PMIC11);
-        MT11B.Vertices.Add(PMIC12);
-        MT11B.Vertices.Add(PMITB11);
-        MT11B.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT11B);
 
-        // Mesh Top 12 Back
-        Mesh MT12B = new Mesh();
-        MT12B.Vertices.Add(PMIC12);
-        MT12B.Vertices.Add(PMITB12);
-        MT12B.Vertices.Add(PMITB11);
-        MT12B.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT12B);
+        //
+        // Line
+        //
 
-        // Mesh Top 21 Back
-        Mesh MT21B = new Mesh();
-        MT21B.Vertices.Add(PMIC12);
-        MT21B.Vertices.Add(PMIC13);
-        MT21B.Vertices.Add(PMITB12);
-        MT21B.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT21B);
+        // Outer Center
+        Point3d P11 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
+        Point3d P12 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
+        Point3d P13 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
+        lsP_Out.Add(P11);
+        lsP_Out.Add(P12);
+        lsP_Out.Add(P13);
+        Line L11 = new Line(P11, P12);
+        Line L12 = new Line(P12, P13);
+        lsL_Return.Add(L11);
+        lsL_Return.Add(L12);
 
-        // Mesh Top 22 Back
-        Mesh MT22B = new Mesh();
-        MT22B.Vertices.Add(PMIC13);
-        MT22B.Vertices.Add(PMITB13);
-        MT22B.Vertices.Add(PMITB12);
-        MT22B.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT22B);
+        //
+        // Points
+        //
 
-        // Mesh Bottom 11 Back
-        Mesh MB11B = new Mesh();
-        MB11B.Vertices.Add(PMIC11);
-        MB11B.Vertices.Add(PMIB11);
-        MB11B.Vertices.Add(PMIC12);
-        MB11B.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MB11B);
+        // Outer Center (Same as Helix Points)
+        Point3d PMOC11 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
+        Point3d PMOC12 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
+        Point3d PMOC13 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
+        lsP_Out.Add(PMOC11);
+        lsP_Out.Add(PMOC12);
+        lsP_Out.Add(PMOC13);
+        // Inner Center
+        Point3d PMIC11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
+        Point3d PMIC12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
+        Point3d PMIC13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIC11);
+        lsP_Out.Add(PMIC12);
+        lsP_Out.Add(PMIC13);
+        // Inner Top
+        Point3d PMIT11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 1.0 + 0.0 * dSpace);
+        Point3d PMIT12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 1.0 + 0.5 * dSpace);
+        Point3d PMIT13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIT11);
+        lsP_Out.Add(PMIT12);
+        lsP_Out.Add(PMIT13);
+        // Inner Top Before
+        Point3d PMITB11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 2.0 * dAngStpRad), (double) iLine + 1.0 - 1.0 * dSpace);
+        Point3d PMITB12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 1.0 * dAngStpRad), (double) iLine + 1.0 - 0.5 * dSpace);
+        Point3d PMITB13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 0.0 * dAngStpRad), (double) iLine + 1.0 - 0.0 * dSpace);
+        lsP_Out.Add(PMITB11);
+        lsP_Out.Add(PMITB12);
+        lsP_Out.Add(PMITB13);
+        // Inner Bottom
+        Point3d PMIB11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine - 1.0 + 0.0 * dSpace);
+        Point3d PMIB12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine - 1.0 + 0.5 * dSpace);
+        Point3d PMIB13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine - 1.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIB11);
+        lsP_Out.Add(PMIB12);
+        lsP_Out.Add(PMIB13);
+        // Inner Bottom After
+        Point3d PMIBA11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
+        Point3d PMIBA12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 3.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 3.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
+        Point3d PMIBA13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 4.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 4.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIBA11);
+        lsP_Out.Add(PMIBA12);
+        lsP_Out.Add(PMIBA13);
 
-        // Mesh Bottom 12 Back
-        Mesh MB12B = new Mesh();
-        MB12B.Vertices.Add(PMIC12);
-        MB12B.Vertices.Add(PMIB11);
-        MB12B.Vertices.Add(PMIB12);
-        MB12B.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MB12B);
+        //
+        // Mesh
+        //
 
-        // Mesh Bottom 21 Back
-        Mesh MB21B = new Mesh();
-        MB21B.Vertices.Add(PMIC12);
-        MB21B.Vertices.Add(PMIC13);
-        MB21B.Vertices.Add(PMIB12);
-        MB21B.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MB21B);
+        //
+        // Front Faces
+        //
 
-        // Mesh Bottom 22 Back
-        Mesh MB22B = new Mesh();
-        MB22B.Vertices.Add(PMIC13);
-        MB22B.Vertices.Add(PMIB12);
-        MB22B.Vertices.Add(PMIB13);
-        MB22B.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MB22B);
+        // Mesh Top 11
+        Mesh MT11 = new Mesh();
+        MT11.Vertices.Add(PMOC11);
+        MT11.Vertices.Add(PMOC12);
+        MT11.Vertices.Add(PMITB11);
+        MT11.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MT11);
+        // Mesh Top 12
+        Mesh MT12 = new Mesh();
+        MT12.Vertices.Add(PMOC12);
+        MT12.Vertices.Add(PMITB12);
+        MT12.Vertices.Add(PMITB11);
+        MT12.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MT12);
+        // Mesh Top 21
+        Mesh MT21 = new Mesh();
+        MT21.Vertices.Add(PMOC12);
+        MT21.Vertices.Add(PMOC13);
+        MT21.Vertices.Add(PMITB12);
+        MT21.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MT21);
+        // Mesh Top 22
+        Mesh MT22 = new Mesh();
+        MT22.Vertices.Add(PMOC13);
+        MT22.Vertices.Add(PMITB13);
+        MT22.Vertices.Add(PMITB12);
+        MT22.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MT22);
+        // Mesh Bottom 11
+        Mesh MB11 = new Mesh();
+        MB11.Vertices.Add(PMOC11);
+        MB11.Vertices.Add(PMIB11);
+        MB11.Vertices.Add(PMOC12);
+        MB11.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MB11);
+        // Mesh Bottom 12
+        Mesh MB12 = new Mesh();
+        MB12.Vertices.Add(PMOC12);
+        MB12.Vertices.Add(PMIB11);
+        MB12.Vertices.Add(PMIB12);
+        MB12.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MB12);
+        // Mesh Bottom 21
+        Mesh MB21 = new Mesh();
+        MB21.Vertices.Add(PMOC12);
+        MB21.Vertices.Add(PMOC13);
+        MB21.Vertices.Add(PMIB12);
+        MB21.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MB21);
+        // Mesh Bottom 22
+        Mesh MB22 = new Mesh();
+        MB22.Vertices.Add(PMOC13);
+        MB22.Vertices.Add(PMIB12);
+        MB22.Vertices.Add(PMIB13);
+        MB22.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MB22);
 
-        // Capping Faces
+        if (bCap == true)
+        {
 
-        // Mesh Top 11 Cap Start
-        Mesh MT11CS = new Mesh();
-        MT11CS.Vertices.Add(PMOC11);
-        MT11CS.Vertices.Add(PMIC11);
-        MT11CS.Vertices.Add(PMITB11);
-        MT11CS.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT11CS);
+          //
+          // Back Faces
+          //
 
-        // Mesh Bottom 11 Cap Start
-        Mesh MB11CS = new Mesh();
-        MB11CS.Vertices.Add(PMOC11);
-        MB11CS.Vertices.Add(PMIC11);
-        MB11CS.Vertices.Add(PMIB11);
-        MB11CS.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MB11CS);
+          // Mesh Top 11 Back
+          Mesh MT11B = new Mesh();
+          MT11B.Vertices.Add(PMIC11);
+          MT11B.Vertices.Add(PMIC12);
+          MT11B.Vertices.Add(PMITB11);
+          MT11B.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MT11B);
+          // Mesh Top 12 Back
+          Mesh MT12B = new Mesh();
+          MT12B.Vertices.Add(PMIC12);
+          MT12B.Vertices.Add(PMITB12);
+          MT12B.Vertices.Add(PMITB11);
+          MT12B.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MT12B);
+          // Mesh Top 21 Back
+          Mesh MT21B = new Mesh();
+          MT21B.Vertices.Add(PMIC12);
+          MT21B.Vertices.Add(PMIC13);
+          MT21B.Vertices.Add(PMITB12);
+          MT21B.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MT21B);
+          // Mesh Top 22 Back
+          Mesh MT22B = new Mesh();
+          MT22B.Vertices.Add(PMIC13);
+          MT22B.Vertices.Add(PMITB13);
+          MT22B.Vertices.Add(PMITB12);
+          MT22B.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MT22B);
+          // Mesh Bottom 11 Back
+          Mesh MB11B = new Mesh();
+          MB11B.Vertices.Add(PMIC11);
+          MB11B.Vertices.Add(PMIB11);
+          MB11B.Vertices.Add(PMIC12);
+          MB11B.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MB11B);
+          // Mesh Bottom 12 Back
+          Mesh MB12B = new Mesh();
+          MB12B.Vertices.Add(PMIC12);
+          MB12B.Vertices.Add(PMIB11);
+          MB12B.Vertices.Add(PMIB12);
+          MB12B.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MB12B);
+          // Mesh Bottom 21 Back
+          Mesh MB21B = new Mesh();
+          MB21B.Vertices.Add(PMIC12);
+          MB21B.Vertices.Add(PMIC13);
+          MB21B.Vertices.Add(PMIB12);
+          MB21B.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MB21B);
+          // Mesh Bottom 22 Back
+          Mesh MB22B = new Mesh();
+          MB22B.Vertices.Add(PMIC13);
+          MB22B.Vertices.Add(PMIB12);
+          MB22B.Vertices.Add(PMIB13);
+          MB22B.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MB22B);
 
-        // Mesh Top 22 Cap End
-        Mesh MT22CE = new Mesh();
-        MT22CE.Vertices.Add(PMOC13);
-        MT22CE.Vertices.Add(PMIC13);
-        MT22CE.Vertices.Add(PMIT11);
-        MT22CE.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT22CE);
+          //
+          // Capping Faces
+          //
 
-        // Mesh Bottom 22 Cap End
-        Mesh MB22CE = new Mesh();
-        MB22CE.Vertices.Add(PMOC13);
-        MB22CE.Vertices.Add(PMIC13);
-        MB22CE.Vertices.Add(PMIB13);
-        MB22CE.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MB22CE);
+          // Mesh Top 11 Cap Start
+          Mesh MT11CS = new Mesh();
+          MT11CS.Vertices.Add(PMOC11);
+          MT11CS.Vertices.Add(PMIC11);
+          MT11CS.Vertices.Add(PMITB11);
+          MT11CS.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MT11CS);
+          // Mesh Bottom 11 Cap Start
+          Mesh MB11CS = new Mesh();
+          MB11CS.Vertices.Add(PMOC11);
+          MB11CS.Vertices.Add(PMIC11);
+          MB11CS.Vertices.Add(PMIB11);
+          MB11CS.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MB11CS);
+          // Mesh Top 22 Cap End
+          Mesh MT22CE = new Mesh();
+          MT22CE.Vertices.Add(PMOC13);
+          MT22CE.Vertices.Add(PMIC13);
+          MT22CE.Vertices.Add(PMIT11);
+          MT22CE.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MT22CE);
+          // Mesh Bottom 22 Cap End
+          Mesh MB22CE = new Mesh();
+          MB22CE.Vertices.Add(PMOC13);
+          MB22CE.Vertices.Add(PMIC13);
+          MB22CE.Vertices.Add(PMIB13);
+          MB22CE.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MB22CE);
+
+        }
+
+        //
+        // Combine Meshes and Add to List
+        //
+
+        Mesh MJ = new Mesh();
+        MJ.Append(lsM_Out);
+        MJ.UnifyNormals();
+        lsM_Out.Clear();
+        lsM_Out.Add(MJ);
 
       }
-
-      // Join Mesh
-      Mesh MJ = new Mesh();
-      MJ.Append(lsM_Out);
-      MJ.UnifyNormals();
-      lsM_Out.Clear();
-      lsM_Out.Add(MJ);
-
     }
 
-      //
-      // Top End
-      //
-    else if ( ((iType == 1) && (iLine + 1 == 2 * iNumV))
+    else if (
+      ((iType == 1) && (iLine + 1 == 2 * iNumV))
       || ((iType == 4) && (iLine + 1 == 2 * iNumV))
       || ((iType == 5) && (iLine + 1 == 2 * iNumV))
       || ((iType == 15) && (iLine + 1 == 2 * iNumV))
-      || (iType == 6) || (iType == 7) || (iType == 10) || (iType == 11) )
+      || (iType == 6)
+      || (iType == 7)
+      || (iType == 10)
+      || (iType == 11)
+      )
     {
 
-      // Line
-      // Outer Center
-      Point3d P11 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
-      Point3d P12 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
-      Point3d P13 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
-      lsP_Out.Add(P11);
-      lsP_Out.Add(P12);
-      lsP_Out.Add(P13);
-      Line L11 = new Line(P11, P12);
-      Line L12 = new Line(P12, P13);
-      lsL_Return.Add(L11);
-      // lsL_Return.Add(L12);
+      //
+      // Top Segments
+      //
 
-      // Mesh
-      // Outer Center (Same as Helix Points)
-      Point3d PMOC11 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
-      Point3d PMOC12 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
-      Point3d PMOC13 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
-      lsP_Out.Add(PMOC11);
-      lsP_Out.Add(PMOC12);
-      lsP_Out.Add(PMOC13);
-      // Inner Center
-      Point3d PMIC11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
-      Point3d PMIC12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
-      Point3d PMIC13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIC11);
-      lsP_Out.Add(PMIC12);
-      lsP_Out.Add(PMIC13);
-      // Inner Top
-      Point3d PMIT11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 1.0 + 0.0 * dSpace);
-      Point3d PMIT12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 1.0 + 0.5 * dSpace);
-      Point3d PMIT13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIT11);
-      lsP_Out.Add(PMIT12);
-      lsP_Out.Add(PMIT13);
-      // Inner Top Before
-      Point3d PMITB11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 2.0 * dAngStpRad), (double) iLine + 1.0 - 1.0 * dSpace);
-      Point3d PMITB12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 1.0 * dAngStpRad), (double) iLine + 1.0 - 0.5 * dSpace);
-      Point3d PMITB13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 0.0 * dAngStpRad), (double) iLine + 1.0 - 0.0 * dSpace);
-      lsP_Out.Add(PMITB11);
-      lsP_Out.Add(PMITB12);
-      lsP_Out.Add(PMITB13);
-      // Inner Bottom
-      Point3d PMIB11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine - 1.0 + 0.0 * dSpace);
-      Point3d PMIB12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine - 1.0 + 0.5 * dSpace);
-      Point3d PMIB13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine - 1.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIB11);
-      lsP_Out.Add(PMIB12);
-      lsP_Out.Add(PMIB13);
-      // Inner Bottom After
-      Point3d PMIBA11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
-      Point3d PMIBA12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 3.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 3.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
-      Point3d PMIBA13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 4.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 4.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIBA11);
-      lsP_Out.Add(PMIBA12);
-      lsP_Out.Add(PMIBA13);
-
-      // Mesh Top 1
-      Mesh MT11 = new Mesh();
-      MT11.Vertices.Add(PMOC11);
-      MT11.Vertices.Add(PMITB12);
-      MT11.Vertices.Add(PMITB11);
-      MT11.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MT11);
-      // Mesh Top 2
-      Mesh MT12 = new Mesh();
-      MT12.Vertices.Add(PMOC11);
-      MT12.Vertices.Add(PMOC12);
-      MT12.Vertices.Add(PMITB12);
-      MT12.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MT12);
-      // Mesh Bottom 1
-      Mesh MB11 = new Mesh();
-      MB11.Vertices.Add(PMOC11);
-      MB11.Vertices.Add(PMIB11);
-      MB11.Vertices.Add(PMIB12);
-      MB11.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MB11);
-      // Mesh Bottom 2
-      Mesh MB12 = new Mesh();
-      MB12.Vertices.Add(PMOC11);
-      MB12.Vertices.Add(PMIB12);
-      MB12.Vertices.Add(PMOC12);
-      MB12.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MB12);
-
-      if (bCap == true)
+      if (bTop == true)
       {
-        // Mesh Top 1 Back
-        Mesh MT11B = new Mesh();
-        MT11B.Vertices.Add(PMIC11);
-        MT11B.Vertices.Add(PMITB11);
-        MT11B.Vertices.Add(PMITB12);
-        MT11B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT11B);
-        // Mesh Top 2 Back
-        Mesh MT12B = new Mesh();
-        MT12B.Vertices.Add(PMIC11);
-        MT12B.Vertices.Add(PMITB12);
-        MT12B.Vertices.Add(PMIC12);
-        MT12B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT12B);
-        // Mesh Bottom 1 Back
-        Mesh MB11B = new Mesh();
-        MB11B.Vertices.Add(PMIC11);
-        MB11B.Vertices.Add(PMIB12);
-        MB11B.Vertices.Add(PMIB11);
-        MB11B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MB11B);
-        // Mesh Bottom 2 Back
-        Mesh MB12B = new Mesh();
-        MB12B.Vertices.Add(PMIC11);
-        MB12B.Vertices.Add(PMIC12);
-        MB12B.Vertices.Add(PMIB12);
-        MB12B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MB12B);
 
-        // Capping Faces
-        // Mesh Top 1 Side
-        Mesh MC11TS = new Mesh();
-        MC11TS.Vertices.Add(PMIC11);
-        MC11TS.Vertices.Add(PMOC11);
-        MC11TS.Vertices.Add(PMITB11);
-        MC11TS.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MC11TS);
-        // Mesh Bottom 1 Side
-        Mesh MC11BS = new Mesh();
-        MC11BS.Vertices.Add(PMIC11);
-        MC11BS.Vertices.Add(PMIB11);
-        MC11BS.Vertices.Add(PMOC11);
-        MC11BS.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MC11BS);
-        // Mesh Top 2 Side
-        Mesh MC12TS = new Mesh();
-        MC12TS.Vertices.Add(PMIC12);
-        MC12TS.Vertices.Add(PMITB12);
-        MC12TS.Vertices.Add(PMOC12);
-        MC12TS.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MC12TS);
-        // Mesh Bottom 2 Side
-        Mesh MC12BS = new Mesh();
-        MC12BS.Vertices.Add(PMIC12);
-        MC12BS.Vertices.Add(PMOC12);
-        MC12BS.Vertices.Add(PMIB12);
-        MC12BS.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MC12BS);
+        //
+        // Line
+        //
 
-        // Top Intersection Triangle
-        // Mesh 1 Side
-        Mesh MT11S = new Mesh();
-        MT11S.Vertices.Add(PMOC12);
-        MT11S.Vertices.Add(PMIC12);
-        MT11S.Vertices.Add(PMIT12);
-        MT11S.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT11S);
-        // Mesh 1 Front Bottom
-        Mesh MT11FB = new Mesh();
-        MT11FB.Vertices.Add(PMOC12);
-        MT11FB.Vertices.Add(PMIT11);
-        MT11FB.Vertices.Add(PMITB12);
-        MT11FB.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT11FB);
-        // Mesh 1 Front Top
-        Mesh MT11FT = new Mesh();
-        MT11FT.Vertices.Add(PMOC12);
-        MT11FT.Vertices.Add(PMIT12);
-        MT11FT.Vertices.Add(PMIT11);
-        MT11FT.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT11FT);
-        // Mesh 1 Rear Bottom
-        Mesh MT11RB = new Mesh();
-        MT11RB.Vertices.Add(PMIC12);
-        MT11RB.Vertices.Add(PMITB12);
-        MT11RB.Vertices.Add(PMIT11);
-        MT11RB.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT11RB);
-        // Mesh 1 Rear Top
-        Mesh MT11RT = new Mesh();
-        MT11RT.Vertices.Add(PMIC12);
-        MT11RT.Vertices.Add(PMIT11);
-        MT11RT.Vertices.Add(PMIT12);
-        MT11RT.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT11RT);
-        // Mesh 1 Bottom
-        Mesh MT11BB = new Mesh();
-        MT11BB.Vertices.Add(PMOC12);
-        MT11BB.Vertices.Add(PMIC12);
-        MT11BB.Vertices.Add(PMITB12);
-        MT11BB.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT11BB);
+        // Outer Center
+        Point3d P11 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
+        Point3d P12 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
+        Point3d P13 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
+        lsP_Out.Add(P11);
+        lsP_Out.Add(P12);
+        lsP_Out.Add(P13);
+        Line L11 = new Line(P11, P12);
+        Line L12 = new Line(P12, P13);
+        lsL_Return.Add(L11);
+        // lsL_Return.Add(L12);
 
+        //
+        // Points
+        //
 
+        // Outer Center (Same as Helix Points)
+        Point3d PMOC11 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
+        Point3d PMOC12 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
+        Point3d PMOC13 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
+        lsP_Out.Add(PMOC11);
+        lsP_Out.Add(PMOC12);
+        lsP_Out.Add(PMOC13);
+        // Inner Center
+        Point3d PMIC11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
+        Point3d PMIC12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
+        Point3d PMIC13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIC11);
+        lsP_Out.Add(PMIC12);
+        lsP_Out.Add(PMIC13);
+        // Inner Top
+        Point3d PMIT11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 1.0 + 0.0 * dSpace);
+        Point3d PMIT12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 1.0 + 0.5 * dSpace);
+        Point3d PMIT13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIT11);
+        lsP_Out.Add(PMIT12);
+        lsP_Out.Add(PMIT13);
+        // Inner Top Before
+        Point3d PMITB11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 2.0 * dAngStpRad), (double) iLine + 1.0 - 1.0 * dSpace);
+        Point3d PMITB12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 1.0 * dAngStpRad), (double) iLine + 1.0 - 0.5 * dSpace);
+        Point3d PMITB13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 0.0 * dAngStpRad), (double) iLine + 1.0 - 0.0 * dSpace);
+        lsP_Out.Add(PMITB11);
+        lsP_Out.Add(PMITB12);
+        lsP_Out.Add(PMITB13);
+        // Inner Bottom
+        Point3d PMIB11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine - 1.0 + 0.0 * dSpace);
+        Point3d PMIB12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine - 1.0 + 0.5 * dSpace);
+        Point3d PMIB13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine - 1.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIB11);
+        lsP_Out.Add(PMIB12);
+        lsP_Out.Add(PMIB13);
+        // Inner Bottom After
+        Point3d PMIBA11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
+        Point3d PMIBA12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 3.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 3.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
+        Point3d PMIBA13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 4.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 4.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIBA11);
+        lsP_Out.Add(PMIBA12);
+        lsP_Out.Add(PMIBA13);
+
+        //
+        // Mesh
+        //
+
+        //
+        // Front Faces
+        //
+
+        // Mesh Top 1
+        Mesh MT11 = new Mesh();
+        MT11.Vertices.Add(PMOC11);
+        MT11.Vertices.Add(PMITB12);
+        MT11.Vertices.Add(PMITB11);
+        MT11.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MT11);
+        // Mesh Top 2
+        Mesh MT12 = new Mesh();
+        MT12.Vertices.Add(PMOC11);
+        MT12.Vertices.Add(PMOC12);
+        MT12.Vertices.Add(PMITB12);
+        MT12.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MT12);
+        // Mesh Bottom 1
+        Mesh MB11 = new Mesh();
+        MB11.Vertices.Add(PMOC11);
+        MB11.Vertices.Add(PMIB11);
+        MB11.Vertices.Add(PMIB12);
+        MB11.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MB11);
+        // Mesh Bottom 2
+        Mesh MB12 = new Mesh();
+        MB12.Vertices.Add(PMOC11);
+        MB12.Vertices.Add(PMIB12);
+        MB12.Vertices.Add(PMOC12);
+        MB12.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MB12);
+
+        if (bCap == true)
+        {
+
+          //
+          // Back Faces
+          //
+
+          // Mesh Top 1 Back
+          Mesh MT11B = new Mesh();
+          MT11B.Vertices.Add(PMIC11);
+          MT11B.Vertices.Add(PMITB11);
+          MT11B.Vertices.Add(PMITB12);
+          MT11B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MT11B);
+          // Mesh Top 2 Back
+          Mesh MT12B = new Mesh();
+          MT12B.Vertices.Add(PMIC11);
+          MT12B.Vertices.Add(PMITB12);
+          MT12B.Vertices.Add(PMIC12);
+          MT12B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MT12B);
+          // Mesh Bottom 1 Back
+          Mesh MB11B = new Mesh();
+          MB11B.Vertices.Add(PMIC11);
+          MB11B.Vertices.Add(PMIB12);
+          MB11B.Vertices.Add(PMIB11);
+          MB11B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MB11B);
+          // Mesh Bottom 2 Back
+          Mesh MB12B = new Mesh();
+          MB12B.Vertices.Add(PMIC11);
+          MB12B.Vertices.Add(PMIC12);
+          MB12B.Vertices.Add(PMIB12);
+          MB12B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MB12B);
+
+          //
+          // Capping Faces
+          //
+
+          // Mesh Top 1 Side
+          Mesh MC11TS = new Mesh();
+          MC11TS.Vertices.Add(PMIC11);
+          MC11TS.Vertices.Add(PMOC11);
+          MC11TS.Vertices.Add(PMITB11);
+          MC11TS.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MC11TS);
+          // Mesh Bottom 1 Side
+          Mesh MC11BS = new Mesh();
+          MC11BS.Vertices.Add(PMIC11);
+          MC11BS.Vertices.Add(PMIB11);
+          MC11BS.Vertices.Add(PMOC11);
+          MC11BS.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MC11BS);
+          // Mesh Top 2 Side
+          Mesh MC12TS = new Mesh();
+          MC12TS.Vertices.Add(PMIC12);
+          MC12TS.Vertices.Add(PMITB12);
+          MC12TS.Vertices.Add(PMOC12);
+          MC12TS.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MC12TS);
+          // Mesh Bottom 2 Side
+          Mesh MC12BS = new Mesh();
+          MC12BS.Vertices.Add(PMIC12);
+          MC12BS.Vertices.Add(PMOC12);
+          MC12BS.Vertices.Add(PMIB12);
+          MC12BS.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MC12BS);
+
+          if ((iLine + 1 != 2 * iNumV))
+          {
+
+            //
+            // Top Intersection Triangle
+            //
+
+            List<Mesh> lsMT = new List<Mesh>();
+            // Mesh 1 Side
+            Mesh MT11S = new Mesh();
+            MT11S.Vertices.Add(PMOC12);
+            MT11S.Vertices.Add(PMIT12);
+            MT11S.Vertices.Add(PMIC12);
+            MT11S.Faces.AddFace(0, 1, 2);
+            //lsM_Out.Add(MT11S);
+            lsMT.Add(MT11S);
+            // Mesh 1 Front Bottom
+            Mesh MT11FB = new Mesh();
+            MT11FB.Vertices.Add(PMOC12);
+            MT11FB.Vertices.Add(PMITB12);
+            MT11FB.Vertices.Add(PMIT11);
+            MT11FB.Faces.AddFace(0, 1, 2);
+            //lsM_Out.Add(MT11FB);
+            lsMT.Add(MT11FB);
+            // Mesh 1 Front Top
+            Mesh MT11FT = new Mesh();
+            MT11FT.Vertices.Add(PMOC12);
+            MT11FT.Vertices.Add(PMIT11);
+            MT11FT.Vertices.Add(PMIT12);
+            MT11FT.Faces.AddFace(0, 1, 2);
+            //lsM_Out.Add(MT11FT);
+            lsMT.Add(MT11FT);
+            // Mesh 1 Rear Bottom
+            Mesh MT11RB = new Mesh();
+            MT11RB.Vertices.Add(PMIC12);
+            MT11RB.Vertices.Add(PMITB12);
+            MT11RB.Vertices.Add(PMIT11);
+            MT11RB.Faces.AddFace(0, 1, 2);
+            //lsM_Out.Add(MT11RB);
+            lsMT.Add(MT11RB);
+            // Mesh 1 Rear Top
+            Mesh MT11RT = new Mesh();
+            MT11RT.Vertices.Add(PMIC12);
+            MT11RT.Vertices.Add(PMIT12);
+            MT11RT.Vertices.Add(PMIT11);
+            MT11RT.Faces.AddFace(0, 1, 2);
+            //lsM_Out.Add(MT11RT);
+            lsMT.Add(MT11RT);
+            // Mesh 1 Bottom
+            Mesh MT11BB = new Mesh();
+            MT11BB.Vertices.Add(PMOC12);
+            MT11BB.Vertices.Add(PMITB12);
+            MT11BB.Vertices.Add(PMIC12);
+            MT11BB.Faces.AddFace(0, 1, 2);
+            //lsM_Out.Add(MT11BB);
+            lsMT.Add(MT11BB);
+
+            //
+            // Combine Meshes and Add to List
+            //
+
+            Mesh MJT = new Mesh();
+            MJT.Append(lsMT);
+            MJT.UnifyNormals();
+            lsM_Out.Add(MJT);
+            lsMT.Clear();
+          }
+
+        }
+
+        //
+        // Combine Meshes and Add to List
+        //
+
+        Mesh MJ = new Mesh();
+        MJ.Append(lsM_Out);
+        //MJ.UnifyNormals();
+        lsM_Out.Clear();
+        lsM_Out.Add(MJ);
 
       }
-
-      // Join Mesh
-      Mesh MJ = new Mesh();
-      MJ.Append(lsM_Out);
-      MJ.UnifyNormals();
-      lsM_Out.Clear();
-      lsM_Out.Add(MJ);
-
     }
 
-      //
-      // Bottom End
-      //
-
-    else if ( (iType == 3)
+    else if (
+      ((iType == 3) && (iLine + 1 != 2 * iNumV) && (iLine != 1))
       || (iType == 8)
       || (iType == 9)
       || (iType == 13)
       || ((iType == 1 && iLine == 0)) )
     {
 
-      // Line
-      // Outer Center (Helix Points)
-      Point3d P11 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
-      Point3d P12 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
-      Point3d P13 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
-      lsP_Out.Add(P11);
-      lsP_Out.Add(P12);
-      lsP_Out.Add(P12);
-      Line L11 = new Line(P11, P12);
-      Line L12 = new Line(P12, P13);
-      //lsL_Return.Add(L11);
-      lsL_Return.Add(L12);
+      //
+      // Bottom Segments
+      //
 
-      // Mesh
-      // Outer Center (Same as Helix Points)
-      Point3d PMOC11 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
-      Point3d PMOC12 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
-      Point3d PMOC13 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
-      lsP_Out.Add(PMOC11);
-      lsP_Out.Add(PMOC12);
-      lsP_Out.Add(PMOC13);
-      // Inner Center
-      Point3d PMIC11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
-      Point3d PMIC12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
-      Point3d PMIC13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIC11);
-      lsP_Out.Add(PMIC12);
-      lsP_Out.Add(PMIC13);
-      // Inner Top
-      Point3d PMIT11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 1.0 + 0.0 * dSpace);
-      Point3d PMIT12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 1.0 + 0.5 * dSpace);
-      Point3d PMIT13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIT11);
-      lsP_Out.Add(PMIT12);
-      lsP_Out.Add(PMIT13);
-      // Inner Top Before
-      Point3d PMITB11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 2.0 * dAngStpRad), (double) iLine + 1.0 - 1.0 * dSpace);
-      Point3d PMITB12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 1.0 * dAngStpRad), (double) iLine + 1.0 - 0.5 * dSpace);
-      Point3d PMITB13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 0.0 * dAngStpRad), (double) iLine + 1.0 - 0.0 * dSpace);
-      lsP_Out.Add(PMITB11);
-      lsP_Out.Add(PMITB12);
-      lsP_Out.Add(PMITB13);
-      // Inner Bottom
-      Point3d PMIB11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine - 1.0 + 0.0 * dSpace);
-      Point3d PMIB12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine - 1.0 + 0.5 * dSpace);
-      Point3d PMIB13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine - 1.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIB11);
-      lsP_Out.Add(PMIB12);
-      lsP_Out.Add(PMIB13);
-      // Inner Bottom After
-      Point3d PMIBA11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
-      Point3d PMIBA12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 3.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 3.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
-      Point3d PMIBA13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 4.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 4.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIBA11);
-      lsP_Out.Add(PMIBA12);
-      lsP_Out.Add(PMIBA13);
-
-      // Mesh Top 1
-      Mesh MT11 = new Mesh();
-      MT11.Vertices.Add(PMOC12);
-      MT11.Vertices.Add(PMOC13);
-      MT11.Vertices.Add(PMITB13);
-      MT11.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MT11);
-      // Mesh Bottom 1
-      Mesh MB11 = new Mesh();
-      MB11.Vertices.Add(PMOC12);
-      MB11.Vertices.Add(PMIB13);
-      MB11.Vertices.Add(PMOC13);
-      MB11.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MB11);
-      // Mesh Top 0
-      Mesh MT10 = new Mesh();
-      MT10.Vertices.Add(PMIC11);
-      MT10.Vertices.Add(PMOC12);
-      MT10.Vertices.Add(PMIT11);
-      MT10.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MT10);
-      // Mesh Bottom 0
-      Mesh MB10 = new Mesh();
-      MB10.Vertices.Add(PMIC11);
-      MB10.Vertices.Add(PMIB13);
-      MB10.Vertices.Add(PMOC12);
-      MB10.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MB10);
-
-      if (bCap == true)
+      if (bBottom == true)
       {
-        // Mesh Top 0 Back
-        Mesh MT10B = new Mesh();
-        MT10B.Vertices.Add(PMIC11);
-        MT10B.Vertices.Add(PMIT11);
-        MT10B.Vertices.Add(PMIC12);
-        MT10B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT10B);
 
-        // Mesh Top 1 Back
-        Mesh MT11B = new Mesh();
-        MT11B.Vertices.Add(PMIC12);
-        MT11B.Vertices.Add(PMIC13);
-        MT11B.Vertices.Add(PMIT11);
-        MT11B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT11B);
+        //
+        // Lines
+        //
 
-        // Mesh Bottom 0 Back
-        Mesh MB10B = new Mesh();
-        MB10B.Vertices.Add(PMIC12);
-        MB10B.Vertices.Add(PMIB13);
-        MB10B.Vertices.Add(PMIC11);
-        MB10B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MB10B);
+        // Outer Center (Helix Points)
+        Point3d P11 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
+        Point3d P12 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
+        Point3d P13 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
+        lsP_Out.Add(P11);
+        lsP_Out.Add(P12);
+        lsP_Out.Add(P12);
+        Line L11 = new Line(P11, P12);
+        Line L12 = new Line(P12, P13);
+        //lsL_Return.Add(L11);
+        lsL_Return.Add(L12);
 
-        // Mesh Bottom 1 Back
-        Mesh MB11B = new Mesh();
-        MB11B.Vertices.Add(PMIC12);
-        MB11B.Vertices.Add(PMIC13);
-        MB11B.Vertices.Add(PMIB13);
-        MB11B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MB11B);
+        //
+        // Points
+        //
 
-        // Capping Faces
+        // Outer Center (Same as Helix Points)
+        Point3d PMOC11 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
+        Point3d PMOC12 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
+        Point3d PMOC13 = new Point3d(-dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
+        lsP_Out.Add(PMOC11);
+        lsP_Out.Add(PMOC12);
+        lsP_Out.Add(PMOC13);
+        // Inner Center
+        Point3d PMIC11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
+        Point3d PMIC12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
+        Point3d PMIC13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIC11);
+        lsP_Out.Add(PMIC12);
+        lsP_Out.Add(PMIC13);
+        // Inner Top
+        Point3d PMIT11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 1.0 + 0.0 * dSpace);
+        Point3d PMIT12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 1.0 + 0.5 * dSpace);
+        Point3d PMIT13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIT11);
+        lsP_Out.Add(PMIT12);
+        lsP_Out.Add(PMIT13);
+        // Inner Top Before
+        Point3d PMITB11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 2.0 * dAngStpRad), (double) iLine + 1.0 - 1.0 * dSpace);
+        Point3d PMITB12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 1.0 * dAngStpRad), (double) iLine + 1.0 - 0.5 * dSpace);
+        Point3d PMITB13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad - 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 0.0 * dAngStpRad), (double) iLine + 1.0 - 0.0 * dSpace);
+        lsP_Out.Add(PMITB11);
+        lsP_Out.Add(PMITB12);
+        lsP_Out.Add(PMITB13);
+        // Inner Bottom
+        Point3d PMIB11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine - 1.0 + 0.0 * dSpace);
+        Point3d PMIB12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine - 1.0 + 0.5 * dSpace);
+        Point3d PMIB13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine - 1.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIB11);
+        lsP_Out.Add(PMIB12);
+        lsP_Out.Add(PMIB13);
+        // Inner Bottom After
+        Point3d PMIBA11 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
+        Point3d PMIBA12 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 3.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 3.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
+        Point3d PMIBA13 = new Point3d(-dR1 * Math.Sin(1.0 * dAngPosRad + 4.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 4.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIBA11);
+        lsP_Out.Add(PMIBA12);
+        lsP_Out.Add(PMIBA13);
 
-        // Mesh Top 1 Side
-        Mesh MT11S = new Mesh();
-        MT11S.Vertices.Add(PMOC13);
-        MT11S.Vertices.Add(PMIC13);
-        MT11S.Vertices.Add(PMIT11);
-        MT11S.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT11S);
+        //
+        // Mesh
+        //
 
-        // Mesh Bottom 1 Side
-        Mesh MB11S = new Mesh();
-        MB11S.Vertices.Add(PMOC13);
-        MB11S.Vertices.Add(PMIB13);
-        MB11S.Vertices.Add(PMIC13);
-        MB11S.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MB11S);
+        //
+        // Front Faces
+        //
 
-      }
-      // Join Meshes
-      Mesh MJ = new Mesh();
-      MJ.Append(lsM_Out);
-      MJ.UnifyNormals();
-      lsM_Out.Clear();
-      lsM_Out.Add(MJ);
+        // Mesh Top 1
+        Mesh MT11 = new Mesh();
+        MT11.Vertices.Add(PMOC12);
+        MT11.Vertices.Add(PMOC13);
+        MT11.Vertices.Add(PMITB13);
+        MT11.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MT11);
+        // Mesh Bottom 1
+        Mesh MB11 = new Mesh();
+        MB11.Vertices.Add(PMOC12);
+        MB11.Vertices.Add(PMIB13);
+        MB11.Vertices.Add(PMOC13);
+        MB11.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MB11);
+        // Mesh Top 0
+        Mesh MT10 = new Mesh();
+        MT10.Vertices.Add(PMIC11);
+        MT10.Vertices.Add(PMOC12);
+        MT10.Vertices.Add(PMIT11);
+        MT10.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MT10);
+        // Mesh Bottom 0
+        Mesh MB10 = new Mesh();
+        MB10.Vertices.Add(PMIC11);
+        MB10.Vertices.Add(PMIB13);
+        MB10.Vertices.Add(PMOC12);
+        MB10.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MB10);
 
-      // Fillling Block
-      if ((bCap == true) && (iLine != 0))
-      {
-        List<Mesh> lsMF = new List<Mesh>();
-        //  Mesh Top
-        Mesh MF11T = new Mesh();
-        MF11T.Vertices.Add(PMOC12);
-        MF11T.Vertices.Add(PMIB13);
-        MF11T.Vertices.Add(PMIC11);
-        MF11T.Faces.AddFace(0, 1, 2);
-        lsMF.Add(MF11T);
-        //  Mesh Front
-        Mesh MF11F = new Mesh();
-        MF11F.Vertices.Add(PMOC12);
-        MF11F.Vertices.Add(PMIC11);
-        MF11F.Vertices.Add(PMIB12);
-        MF11F.Faces.AddFace(0, 1, 2);
-        lsMF.Add(MF11F);
-        //  Mesh Bottom
-        Mesh MF11B = new Mesh();
-        MF11B.Vertices.Add(PMOC12);
-        MF11B.Vertices.Add(PMIB12);
-        MF11B.Vertices.Add(PMIB13);
-        MF11B.Faces.AddFace(0, 1, 2);
-        lsMF.Add(MF11B);
-        //  Mesh Rear
-        Mesh MF11R = new Mesh();
-        MF11R.Vertices.Add(PMIC11);
-        MF11R.Vertices.Add(PMIB12);
-        MF11R.Vertices.Add(PMIB13);
-        MF11R.Faces.AddFace(0, 1, 2);
-        lsMF.Add(MF11R);
-        // Join Meshes
-        Mesh MFJ = new Mesh();
-        MFJ.Append(lsMF);
-        MFJ.UnifyNormals();
-        lsM_Out.Add(MFJ);
-        lsMF.Clear();
+        if (bCap == true)
+        {
+
+          //
+          // Back Faces
+          //
+
+          // Mesh Top 0 Back
+          Mesh MT10B = new Mesh();
+          MT10B.Vertices.Add(PMIC11);
+          MT10B.Vertices.Add(PMIT11);
+          MT10B.Vertices.Add(PMIC12);
+          MT10B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MT10B);
+          // Mesh Top 1 Back
+          Mesh MT11B = new Mesh();
+          MT11B.Vertices.Add(PMIC12);
+          MT11B.Vertices.Add(PMIC13);
+          MT11B.Vertices.Add(PMIT11);
+          MT11B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MT11B);
+          // Mesh Bottom 0 Back
+          Mesh MB10B = new Mesh();
+          MB10B.Vertices.Add(PMIC12);
+          MB10B.Vertices.Add(PMIB13);
+          MB10B.Vertices.Add(PMIC11);
+          MB10B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MB10B);
+          // Mesh Bottom 1 Back
+          Mesh MB11B = new Mesh();
+          MB11B.Vertices.Add(PMIC12);
+          MB11B.Vertices.Add(PMIC13);
+          MB11B.Vertices.Add(PMIB13);
+          MB11B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MB11B);
+
+          //
+          // Capping Faces
+          //
+
+          // Mesh Top 1 Side
+          Mesh MT11S = new Mesh();
+          MT11S.Vertices.Add(PMOC13);
+          MT11S.Vertices.Add(PMIC13);
+          MT11S.Vertices.Add(PMIT11);
+          MT11S.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MT11S);
+          // Mesh Bottom 1 Side
+          Mesh MB11S = new Mesh();
+          MB11S.Vertices.Add(PMOC13);
+          MB11S.Vertices.Add(PMIB13);
+          MB11S.Vertices.Add(PMIC13);
+          MB11S.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MB11S);
+
+        }
+
+        //
+        // Combine Meshe and Add to List
+        //
+
+        Mesh MJ = new Mesh();
+        MJ.Append(lsM_Out);
+        MJ.UnifyNormals();
+        lsM_Out.Clear();
+        lsM_Out.Add(MJ);
+
+        //
+        // Gap Fillling Block
+        //
+
+        if ((bCap == true) && (iLine != 0))
+        {
+          List<Mesh> lsMF = new List<Mesh>();
+          //  Mesh Top
+          Mesh MF11T = new Mesh();
+          MF11T.Vertices.Add(PMOC12);
+          MF11T.Vertices.Add(PMIB13);
+          MF11T.Vertices.Add(PMIC11);
+          MF11T.Faces.AddFace(0, 1, 2);
+          lsMF.Add(MF11T);
+          //  Mesh Front
+          Mesh MF11F = new Mesh();
+          MF11F.Vertices.Add(PMOC12);
+          MF11F.Vertices.Add(PMIC11);
+          MF11F.Vertices.Add(PMIB12);
+          MF11F.Faces.AddFace(0, 1, 2);
+          lsMF.Add(MF11F);
+          //  Mesh Bottom
+          Mesh MF11B = new Mesh();
+          MF11B.Vertices.Add(PMOC12);
+          MF11B.Vertices.Add(PMIB12);
+          MF11B.Vertices.Add(PMIB13);
+          MF11B.Faces.AddFace(0, 1, 2);
+          lsMF.Add(MF11B);
+          //  Mesh Rear
+          Mesh MF11R = new Mesh();
+          MF11R.Vertices.Add(PMIC11);
+          MF11R.Vertices.Add(PMIB12);
+          MF11R.Vertices.Add(PMIB13);
+          MF11R.Faces.AddFace(0, 1, 2);
+          lsMF.Add(MF11R);
+
+          //
+          // Combine Meshes and Add to List
+          //
+
+          Mesh MFJ = new Mesh();
+          MFJ.Append(lsMF);
+          MFJ.UnifyNormals();
+          lsM_Out.Add(MFJ);
+          lsMF.Clear();
+        }
       }
     }
 
-
+    //
+    // Output
+    //
     lsM = lsM_Out;
     lsP = lsP_Out;
     return lsL_Return;
+
   }
 
   //
   // Helix Right
   //
+
   List<Line> lsL_HelixRight(int iLine, int iColumn, int iType, int iNumV, double dAngStpRad, double dR1, double dR2, double dSpace, bool bCap, out List<Mesh> lsM, out List<Point3d> lsP) // iNumV = iNumV
   {
+
     List<Line> lsL_Return = new List<Line>();
     List<Mesh> lsM_Out = new List<Mesh>();
     List<Point3d> lsP_Out = new List<Point3d>();
     double dAngPosRad = ((double) iColumn) * 2.0 * dAngStpRad;
 
-    //
-    // Middle Segments
-    //
-    if ( ((iType == 2) && (iLine != 0)) || (iType == 3) || (iType == 6) || (iType == 15) )
+    if ( ( (iType == 2) && (iLine != 0) ) || ((iType == 3) && (iLine != 31)) || ((iType == 6)) || ((iType == 15)) )
     {
 
-      // Line
-      // Outer Center (Helix Points)
-      Point3d P11 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
-      Point3d P12 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
-      Point3d P13 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
-      Line L11 = new Line(P11, P12);
-      Line L12 = new Line(P12, P13);
-      lsL_Return.Add(L11);
-      lsL_Return.Add(L12);
+      //
+      // Middle Segments
+      //
 
-      // Mesh
-      // Outer Center (Same as Helix Points)
-      Point3d PMOC11 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
-      Point3d PMOC12 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
-      Point3d PMOC13 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
-      lsP_Out.Add(PMOC11);
-      lsP_Out.Add(PMOC12);
-      lsP_Out.Add(PMOC13);
-      // Inner Center
-      Point3d PMIC11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
-      Point3d PMIC12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
-      Point3d PMIC13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIC11);
-      lsP_Out.Add(PMIC12);
-      lsP_Out.Add(PMIC13);
-      // Inner Top
-      Point3d PMIT11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 1.0 + 0.0 * dSpace);
-      Point3d PMIT12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 1.0 + 0.5 * dSpace);
-      Point3d PMIT13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIT11);
-      lsP_Out.Add(PMIT12);
-      lsP_Out.Add(PMIT13);
-      // Inner Top Before
-      Point3d PMITB11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 2.0 * dAngStpRad), (double) iLine + 1.0 - 1.0 * dSpace);
-      Point3d PMITB12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 1.0 * dAngStpRad), (double) iLine + 1.0 - 0.5 * dSpace);
-      Point3d PMITB13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 0.0 * dAngStpRad), (double) iLine + 1.0 - 0.0 * dSpace);
-      lsP_Out.Add(PMITB11);
-      lsP_Out.Add(PMITB12);
-      lsP_Out.Add(PMITB13);
-      // Inner Bottom
-      Point3d PMIB11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine - 1.0 + 0.0 * dSpace);
-      Point3d PMIB12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine - 1.0 + 0.5 * dSpace);
-      Point3d PMIB13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine - 1.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIB11);
-      lsP_Out.Add(PMIB12);
-      lsP_Out.Add(PMIB13);
-      // Inner Bottom After
-      Point3d PMIBA11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
-      Point3d PMIBA12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 3.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 3.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
-      Point3d PMIBA13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 4.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 4.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIBA11);
-      lsP_Out.Add(PMIBA12);
-      lsP_Out.Add(PMIBA13);
-
-      // Mesh Top 11
-      Mesh MT11 = new Mesh();
-      MT11.Vertices.Add(PMOC11);
-      MT11.Vertices.Add(PMOC12);
-      MT11.Vertices.Add(PMITB11);
-      MT11.Faces.AddFace(0, 2, 1);
-      lsM_Out.Add(MT11);
-
-      // Mesh Top 12
-      Mesh MT12 = new Mesh();
-      MT12.Vertices.Add(PMOC12);
-      MT12.Vertices.Add(PMITB12);
-      MT12.Vertices.Add(PMITB11);
-      MT12.Faces.AddFace(0, 2, 1);
-      lsM_Out.Add(MT12);
-
-      // Mesh Top 21
-      Mesh MT21 = new Mesh();
-      MT21.Vertices.Add(PMOC12);
-      MT21.Vertices.Add(PMOC13);
-      MT21.Vertices.Add(PMITB12);
-      MT21.Faces.AddFace(0, 2, 1);
-      lsM_Out.Add(MT21);
-
-      // Mesh Top 22
-      Mesh MT22 = new Mesh();
-      MT22.Vertices.Add(PMOC13);
-      MT22.Vertices.Add(PMITB13);
-      MT22.Vertices.Add(PMITB12);
-      MT22.Faces.AddFace(0, 2, 1);
-      lsM_Out.Add(MT22);
-
-      // Mesh Bottom 11
-      Mesh MB11 = new Mesh();
-      MB11.Vertices.Add(PMOC11);
-      MB11.Vertices.Add(PMIB11);
-      MB11.Vertices.Add(PMOC12);
-      MB11.Faces.AddFace(0, 2, 1);
-      lsM_Out.Add(MB11);
-
-      // Mesh Bottom 12
-      Mesh MB12 = new Mesh();
-      MB12.Vertices.Add(PMOC12);
-      MB12.Vertices.Add(PMIB11);
-      MB12.Vertices.Add(PMIB12);
-      MB12.Faces.AddFace(0, 2, 1);
-      lsM_Out.Add(MB12);
-
-      // Mesh Bottom 21
-      Mesh MB21 = new Mesh();
-      MB21.Vertices.Add(PMOC12);
-      MB21.Vertices.Add(PMOC13);
-      MB21.Vertices.Add(PMIB12);
-      MB21.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MB21);
-
-      // Mesh Bottom 22
-      Mesh MB22 = new Mesh();
-      MB22.Vertices.Add(PMOC13);
-      MB22.Vertices.Add(PMIB12);
-      MB22.Vertices.Add(PMIB13);
-      MB22.Faces.AddFace(0, 2, 1);
-      lsM_Out.Add(MB22);
-
-      if (bCap == true)
+      if(bMid == true)
       {
-        // Mesh Top 11 Back
-        Mesh MT11B = new Mesh();
-        MT11B.Vertices.Add(PMIC11);
-        MT11B.Vertices.Add(PMIC12);
-        MT11B.Vertices.Add(PMITB11);
-        MT11B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT11B);
 
-        // Mesh Top 12 Back
-        Mesh MT12B = new Mesh();
-        MT12B.Vertices.Add(PMIC12);
-        MT12B.Vertices.Add(PMITB12);
-        MT12B.Vertices.Add(PMITB11);
-        MT12B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT12B);
+        //
+        // Line
+        //
 
-        // Mesh Top 21 Back
-        Mesh MT21B = new Mesh();
-        MT21B.Vertices.Add(PMIC12);
-        MT21B.Vertices.Add(PMIC13);
-        MT21B.Vertices.Add(PMITB12);
-        MT21B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT21B);
+        // Outer Center (Helix Points)
+        Point3d P11 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
+        Point3d P12 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
+        Point3d P13 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
+        Line L11 = new Line(P11, P12);
+        Line L12 = new Line(P12, P13);
+        lsL_Return.Add(L11);
+        lsL_Return.Add(L12);
 
-        // Mesh Top 22 Back
-        Mesh MT22B = new Mesh();
-        MT22B.Vertices.Add(PMIC13);
-        MT22B.Vertices.Add(PMITB13);
-        MT22B.Vertices.Add(PMITB12);
-        MT22B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT22B);
+        //
+        // Point
+        //
 
-        // Mesh Bottom 11 Back
-        Mesh MB11B = new Mesh();
-        MB11B.Vertices.Add(PMIC11);
-        MB11B.Vertices.Add(PMIB11);
-        MB11B.Vertices.Add(PMIC12);
-        MB11B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MB11B);
+        // Outer Center (Same as Helix Points)
+        Point3d PMOC11 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
+        Point3d PMOC12 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
+        Point3d PMOC13 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
+        lsP_Out.Add(PMOC11);
+        lsP_Out.Add(PMOC12);
+        lsP_Out.Add(PMOC13);
+        // Outer Center Before
+        Point3d PMOCB11 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad - 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad - 2.0 * dAngStpRad), (double) iLine - 1.0 * dSpace);
+        Point3d PMOCB12 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad - 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad - 1.0 * dAngStpRad), (double) iLine - 0.5 * dSpace);
+        Point3d PMOCB13 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad - 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad - 0.0 * dAngStpRad), (double) iLine - 0.0 * dSpace);
+        lsP_Out.Add(PMOCB11);
+        lsP_Out.Add(PMOCB12);
+        lsP_Out.Add(PMOCB13);
+        // Inner Center
+        Point3d PMIC11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
+        Point3d PMIC12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
+        Point3d PMIC13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIC11);
+        lsP_Out.Add(PMIC12);
+        lsP_Out.Add(PMIC13);
+        // Inner Center Before
+        Point3d PMICB11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 2.0 * dAngStpRad), (double) iLine + 0.0 - 1.0 * dSpace);
+        Point3d PMICB12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 1.0 * dAngStpRad), (double) iLine + 0.0 - 0.5 * dSpace);
+        Point3d PMICB13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 0.0 * dAngStpRad), (double) iLine + 0.0 - 0.0 * dSpace);
+        lsP_Out.Add(PMICB11);
+        lsP_Out.Add(PMICB12);
+        lsP_Out.Add(PMICB13);
+        // Inner Top
+        Point3d PMIT11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 1.0 + 0.0 * dSpace);
+        Point3d PMIT12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 1.0 + 0.5 * dSpace);
+        Point3d PMIT13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIT11);
+        lsP_Out.Add(PMIT12);
+        lsP_Out.Add(PMIT13);
+        // Inner Top Before
+        Point3d PMITB11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 2.0 * dAngStpRad), (double) iLine + 1.0 - 1.0 * dSpace);
+        Point3d PMITB12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 1.0 * dAngStpRad), (double) iLine + 1.0 - 0.5 * dSpace);
+        Point3d PMITB13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 0.0 * dAngStpRad), (double) iLine + 1.0 - 0.0 * dSpace);
+        lsP_Out.Add(PMITB11);
+        lsP_Out.Add(PMITB12);
+        lsP_Out.Add(PMITB13);
+        // Inner Bottom
+        Point3d PMIB11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine - 1.0 + 0.0 * dSpace);
+        Point3d PMIB12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine - 1.0 + 0.5 * dSpace);
+        Point3d PMIB13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine - 1.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIB11);
+        lsP_Out.Add(PMIB12);
+        lsP_Out.Add(PMIB13);
+        // Inner Bottom After
+        Point3d PMIBA11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
+        Point3d PMIBA12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 3.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 3.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
+        Point3d PMIBA13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 4.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 4.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIBA11);
+        lsP_Out.Add(PMIBA12);
+        lsP_Out.Add(PMIBA13);
 
-        // Mesh Bottom 12 Back
-        Mesh MB12B = new Mesh();
-        MB12B.Vertices.Add(PMIC12);
-        MB12B.Vertices.Add(PMIB11);
-        MB12B.Vertices.Add(PMIB12);
-        MB12B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MB12B);
+        //
+        // Mesh
+        //
 
-        // Mesh Bottom 21 Back
-        Mesh MB21B = new Mesh();
-        MB21B.Vertices.Add(PMIC12);
-        MB21B.Vertices.Add(PMIC13);
-        MB21B.Vertices.Add(PMIB12);
-        MB21B.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MB21B);
+        //
+        // Front Faces
+        //
 
-        // Mesh Bottom 22 Back
-        Mesh MB22B = new Mesh();
-        MB22B.Vertices.Add(PMIC13);
-        MB22B.Vertices.Add(PMIB12);
-        MB22B.Vertices.Add(PMIB13);
-        MB22B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MB22B);
+        // Mesh Top 11
+        Mesh MT11 = new Mesh();
+        MT11.Vertices.Add(PMOC11);
+        MT11.Vertices.Add(PMOC12);
+        MT11.Vertices.Add(PMITB11);
+        MT11.Faces.AddFace(0, 2, 1);
+        lsM_Out.Add(MT11);
+        // Mesh Top 12
+        Mesh MT12 = new Mesh();
+        MT12.Vertices.Add(PMOC12);
+        MT12.Vertices.Add(PMITB12);
+        MT12.Vertices.Add(PMITB11);
+        MT12.Faces.AddFace(0, 2, 1);
+        lsM_Out.Add(MT12);
+        // Mesh Top 21
+        Mesh MT21 = new Mesh();
+        MT21.Vertices.Add(PMOC12);
+        MT21.Vertices.Add(PMOC13);
+        MT21.Vertices.Add(PMITB12);
+        MT21.Faces.AddFace(0, 2, 1);
+        lsM_Out.Add(MT21);
+        // Mesh Top 22
+        Mesh MT22 = new Mesh();
+        MT22.Vertices.Add(PMOC13);
+        MT22.Vertices.Add(PMITB13);
+        MT22.Vertices.Add(PMITB12);
+        MT22.Faces.AddFace(0, 2, 1);
+        lsM_Out.Add(MT22);
+        // Mesh Bottom 11
+        Mesh MB11 = new Mesh();
+        MB11.Vertices.Add(PMOC11);
+        MB11.Vertices.Add(PMIB11);
+        MB11.Vertices.Add(PMOC12);
+        MB11.Faces.AddFace(0, 2, 1);
+        lsM_Out.Add(MB11);
+        // Mesh Bottom 12
+        Mesh MB12 = new Mesh();
+        MB12.Vertices.Add(PMOC12);
+        MB12.Vertices.Add(PMIB11);
+        MB12.Vertices.Add(PMIB12);
+        MB12.Faces.AddFace(0, 2, 1);
+        lsM_Out.Add(MB12);
+        // Mesh Bottom 21
+        Mesh MB21 = new Mesh();
+        MB21.Vertices.Add(PMOC12);
+        MB21.Vertices.Add(PMOC13);
+        MB21.Vertices.Add(PMIB12);
+        MB21.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MB21);
+        // Mesh Bottom 22
+        Mesh MB22 = new Mesh();
+        MB22.Vertices.Add(PMOC13);
+        MB22.Vertices.Add(PMIB12);
+        MB22.Vertices.Add(PMIB13);
+        MB22.Faces.AddFace(0, 2, 1);
+        lsM_Out.Add(MB22);
 
-        // Capping Faces
+        if (bCap == true)
+        {
+          //
+          // Back Faces
+          //
 
-        // Mesh Top 11 Cap Start
-        Mesh MT11CS = new Mesh();
-        MT11CS.Vertices.Add(PMOC11);
-        MT11CS.Vertices.Add(PMIC11);
-        MT11CS.Vertices.Add(PMITB11);
-        MT11CS.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT11CS);
+          // Mesh Top 11 Back
+          Mesh MT11B = new Mesh();
+          MT11B.Vertices.Add(PMIC11);
+          MT11B.Vertices.Add(PMIC12);
+          MT11B.Vertices.Add(PMITB11);
+          MT11B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MT11B);
+          // Mesh Top 12 Back
+          Mesh MT12B = new Mesh();
+          MT12B.Vertices.Add(PMIC12);
+          MT12B.Vertices.Add(PMITB12);
+          MT12B.Vertices.Add(PMITB11);
+          MT12B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MT12B);
+          // Mesh Top 21 Back
+          Mesh MT21B = new Mesh();
+          MT21B.Vertices.Add(PMIC12);
+          MT21B.Vertices.Add(PMIC13);
+          MT21B.Vertices.Add(PMITB12);
+          MT21B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MT21B);
+          // Mesh Top 22 Back
+          Mesh MT22B = new Mesh();
+          MT22B.Vertices.Add(PMIC13);
+          MT22B.Vertices.Add(PMITB13);
+          MT22B.Vertices.Add(PMITB12);
+          MT22B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MT22B);
+          // Mesh Bottom 11 Back
+          Mesh MB11B = new Mesh();
+          MB11B.Vertices.Add(PMIC11);
+          MB11B.Vertices.Add(PMIB11);
+          MB11B.Vertices.Add(PMIC12);
+          MB11B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MB11B);
+          // Mesh Bottom 12 Back
+          Mesh MB12B = new Mesh();
+          MB12B.Vertices.Add(PMIC12);
+          MB12B.Vertices.Add(PMIB11);
+          MB12B.Vertices.Add(PMIB12);
+          MB12B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MB12B);
+          // Mesh Bottom 21 Back
+          Mesh MB21B = new Mesh();
+          MB21B.Vertices.Add(PMIC12);
+          MB21B.Vertices.Add(PMIC13);
+          MB21B.Vertices.Add(PMIB12);
+          MB21B.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MB21B);
+          // Mesh Bottom 22 Back
+          Mesh MB22B = new Mesh();
+          MB22B.Vertices.Add(PMIC13);
+          MB22B.Vertices.Add(PMIB12);
+          MB22B.Vertices.Add(PMIB13);
+          MB22B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MB22B);
 
-        // Mesh Bottom 11 Cap Start
-        Mesh MB11CS = new Mesh();
-        MB11CS.Vertices.Add(PMOC11);
-        MB11CS.Vertices.Add(PMIC11);
-        MB11CS.Vertices.Add(PMIB11);
-        MB11CS.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MB11CS);
+          //
+          // Capping Faces
+          //
 
-        // Mesh Top 22 Cap End
-        Mesh MT22CE = new Mesh();
-        MT22CE.Vertices.Add(PMOC13);
-        MT22CE.Vertices.Add(PMIC13);
-        MT22CE.Vertices.Add(PMIT11);
-        MT22CE.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT22CE);
+          // Mesh Top 11 Cap Start
+          Mesh MT11CS = new Mesh();
+          MT11CS.Vertices.Add(PMOC11);
+          MT11CS.Vertices.Add(PMIC11);
+          MT11CS.Vertices.Add(PMITB11);
+          MT11CS.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MT11CS);
+          // Mesh Bottom 11 Cap Start
+          Mesh MB11CS = new Mesh();
+          MB11CS.Vertices.Add(PMOC11);
+          MB11CS.Vertices.Add(PMIC11);
+          MB11CS.Vertices.Add(PMIB11);
+          MB11CS.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MB11CS);
+          // Mesh Top 22 Cap End
+          Mesh MT22CE = new Mesh();
+          MT22CE.Vertices.Add(PMOC13);
+          MT22CE.Vertices.Add(PMIC13);
+          MT22CE.Vertices.Add(PMIT11);
+          MT22CE.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MT22CE);
+          // Mesh Bottom 22 Cap End
+          Mesh MB22CE = new Mesh();
+          MB22CE.Vertices.Add(PMOC13);
+          MB22CE.Vertices.Add(PMIC13);
+          MB22CE.Vertices.Add(PMIB13);
+          MB22CE.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MB22CE);
+        }
 
-        // Mesh Bottom 22 Cap End
-        Mesh MB22CE = new Mesh();
-        MB22CE.Vertices.Add(PMOC13);
-        MB22CE.Vertices.Add(PMIC13);
-        MB22CE.Vertices.Add(PMIB13);
-        MB22CE.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MB22CE);
+        //
+        // Combine Mesh and Add to List
+        //
+
+        Mesh MJ = new Mesh();
+        MJ.Append(lsM_Out);
+        MJ.UnifyNormals();
+        lsM_Out.Clear();
+        lsM_Out.Add(MJ);
+
+        //
+        // End Block
+        //
+        if( (iType == 3) && (iLine == 1) )
+        {
+          if (bCap == true)
+          {
+            List<Mesh> lsMF = new List<Mesh>();
+            //  Mesh Front Top
+            Mesh MF11FT = new Mesh();
+            MF11FT.Vertices.Add(PMOCB12);
+            MF11FT.Vertices.Add(PMITB11);
+            MF11FT.Vertices.Add(PMOCB13);
+            MF11FT.Faces.AddFace(0, 1, 2);
+            lsMF.Add(MF11FT);
+            //  Mesh Front Bottom
+            Mesh MF11FB = new Mesh();
+            MF11FB.Vertices.Add(PMIB11);
+            MF11FB.Vertices.Add(PMOCB12);
+            MF11FB.Vertices.Add(PMOCB13);
+            MF11FB.Faces.AddFace(0, 1, 2);
+            lsMF.Add(MF11FB);
+            //  Mesh Rear Top
+            Mesh MF11RT = new Mesh();
+            MF11RT.Vertices.Add(PMICB12);
+            MF11RT.Vertices.Add(PMITB11);
+            MF11RT.Vertices.Add(PMICB13);
+            MF11RT.Faces.AddFace(0, 2, 1);
+            lsMF.Add(MF11RT);
+            //  Mesh Rear Bottom
+            Mesh MF11RB = new Mesh();
+            MF11RB.Vertices.Add(PMIB11);
+            MF11RB.Vertices.Add(PMICB12);
+            MF11RB.Vertices.Add(PMICB13);
+            MF11RB.Faces.AddFace(0, 2, 1);
+            lsMF.Add(MF11RB);
+            //  Mesh Top Top
+            Mesh MF11TT = new Mesh();
+            MF11TT.Vertices.Add(PMOC11);
+            MF11TT.Vertices.Add(PMITB11);
+            MF11TT.Vertices.Add(PMIC11);
+            MF11TT.Faces.AddFace(0, 1, 2);
+            lsMF.Add(MF11TT);
+            //  Mesh Top Bottom
+            Mesh MF11TB = new Mesh();
+            MF11TB.Vertices.Add(PMIB11);
+            MF11TB.Vertices.Add(PMOC11);
+            MF11TB.Vertices.Add(PMIC11);
+            MF11TB.Faces.AddFace(0, 1, 2);
+            lsMF.Add(MF11TB);
+            //  Mesh Bottom Front Top
+            Mesh MF11BFT = new Mesh();
+            MF11BFT.Vertices.Add(PMOCB12);
+            MF11BFT.Vertices.Add(PMICB11);
+            MF11BFT.Vertices.Add(PMITB11);
+            MF11BFT.Faces.AddFace(0, 1, 2);
+            lsMF.Add(MF11BFT);
+            //  Mesh Bottom Front Bottom
+            Mesh MF11BFB = new Mesh();
+            MF11BFB.Vertices.Add(PMIB11);
+            MF11BFB.Vertices.Add(PMICB11);
+            MF11BFB.Vertices.Add(PMOCB12);
+            MF11BFB.Faces.AddFace(0, 1, 2);
+            lsMF.Add(MF11BFB);
+            //  Mesh Bottom Rear Top
+            Mesh MF11BRT = new Mesh();
+            MF11BRT.Vertices.Add(PMICB12);
+            MF11BRT.Vertices.Add(PMICB11);
+            MF11BRT.Vertices.Add(PMITB11);
+            MF11BRT.Faces.AddFace(0, 2, 1);
+            lsMF.Add(MF11BRT);
+            //  Mesh Bottom Rear Bottom
+            Mesh MF11BRB = new Mesh();
+            MF11BRB.Vertices.Add(PMIB11);
+            MF11BRB.Vertices.Add(PMICB11);
+            MF11BRB.Vertices.Add(PMICB12);
+            MF11BRB.Faces.AddFace(0, 2, 1);
+            lsMF.Add(MF11BRB);
+
+            //
+            // Combine Meshes and Add to List
+            //
+
+            Mesh MFJ = new Mesh();
+            MFJ.Append(lsMF);
+            MFJ.UnifyNormals();
+            lsM_Out.Add(MFJ);
+            lsMF.Clear();
+          }
+        }
       }
-      // Join Mesh
-      Mesh MJ = new Mesh();
-      MJ.Append(lsM_Out);
-      MJ.UnifyNormals();
-      lsM_Out.Clear();
-      lsM_Out.Add(MJ);
     }
 
-      //
-      // Top End
-      //
     else if ( (iType == 5) || (iType == 7) || (iType == 8) || (iType == 12)
       || ((iType == 2) && (iLine + 1 == 2 * iNumV))
-      || ((iType == 3) && (iLine + 1 == 2 * iNumV))
+      // || ((iType == 3) && (iLine + 1 == 2 * iNumV))
       || ((iType == 6) && (iLine + 1 == 2 * iNumV))
       || ((iType == 15) && (iLine + 1 == 2 * iNumV)) )
     {
 
-      // Line
-      // Outer Center
-      Point3d P11 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
-      Point3d P12 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
-      Point3d P13 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
-      lsP_Out.Add(P11);
-      lsP_Out.Add(P12);
-      lsP_Out.Add(P13);
-      Line L11 = new Line(P11, P12);
-      Line L12 = new Line(P12, P13);
-      lsL_Return.Add(L11);
-      // lsL_Return.Add(L12);
+      //
+      // Top Segments
+      //
 
-      // Mesh
-      // Outer Center (Same as Helix Points)
-      Point3d PMOC11 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
-      Point3d PMOC12 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
-      Point3d PMOC13 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
-      lsP_Out.Add(PMOC11);
-      lsP_Out.Add(PMOC12);
-      lsP_Out.Add(PMOC13);
-      // Inner Center
-      Point3d PMIC11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
-      Point3d PMIC12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
-      Point3d PMIC13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIC11);
-      lsP_Out.Add(PMIC12);
-      lsP_Out.Add(PMIC13);
-      // Inner Top
-      Point3d PMIT11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 1.0 + 0.0 * dSpace);
-      Point3d PMIT12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 1.0 + 0.5 * dSpace);
-      Point3d PMIT13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIT11);
-      lsP_Out.Add(PMIT12);
-      lsP_Out.Add(PMIT13);
-      // Inner Top Before
-      Point3d PMITB11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 2.0 * dAngStpRad), (double) iLine + 1.0 - 1.0 * dSpace);
-      Point3d PMITB12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 1.0 * dAngStpRad), (double) iLine + 1.0 - 0.5 * dSpace);
-      Point3d PMITB13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 0.0 * dAngStpRad), (double) iLine + 1.0 - 0.0 * dSpace);
-      lsP_Out.Add(PMITB11);
-      lsP_Out.Add(PMITB12);
-      lsP_Out.Add(PMITB13);
-      // Inner Bottom
-      Point3d PMIB11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine - 1.0 + 0.0 * dSpace);
-      Point3d PMIB12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine - 1.0 + 0.5 * dSpace);
-      Point3d PMIB13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine - 1.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIB11);
-      lsP_Out.Add(PMIB12);
-      lsP_Out.Add(PMIB13);
-      // Inner Bottom After
-      Point3d PMIBA11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
-      Point3d PMIBA12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 3.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 3.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
-      Point3d PMIBA13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 4.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 4.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIBA11);
-      lsP_Out.Add(PMIBA12);
-      lsP_Out.Add(PMIBA13);
-
-      // Mesh Top 1
-      Mesh MT11 = new Mesh();
-      MT11.Vertices.Add(PMOC11);
-      MT11.Vertices.Add(PMITB12);
-      MT11.Vertices.Add(PMITB11);
-      MT11.Faces.AddFace(0, 2, 1);
-      lsM_Out.Add(MT11);
-      // Mesh Top 2
-      Mesh MT12 = new Mesh();
-      MT12.Vertices.Add(PMOC11);
-      MT12.Vertices.Add(PMOC12);
-      MT12.Vertices.Add(PMITB12);
-      MT12.Faces.AddFace(0, 2, 1);
-      lsM_Out.Add(MT12);
-      // Mesh Bottom 1
-      Mesh MB11 = new Mesh();
-      MB11.Vertices.Add(PMOC11);
-      MB11.Vertices.Add(PMIB11);
-      MB11.Vertices.Add(PMIB12);
-      MB11.Faces.AddFace(0, 2, 1);
-      lsM_Out.Add(MB11);
-      // Mesh Bottom 2
-      Mesh MB12 = new Mesh();
-      MB12.Vertices.Add(PMOC11);
-      MB12.Vertices.Add(PMIB12);
-      MB12.Vertices.Add(PMOC12);
-      MB12.Faces.AddFace(0, 2, 1);
-      lsM_Out.Add(MB12);
-
-      if (bCap == true)
+      if (bTop == true)
       {
-        // Mesh Top 1 Back
-        Mesh MT11B = new Mesh();
-        MT11B.Vertices.Add(PMIC11);
-        MT11B.Vertices.Add(PMITB12);
-        MT11B.Vertices.Add(PMITB11);
-        MT11B.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT11B);
-        // Mesh Top 2 Back
-        Mesh MT12B = new Mesh();
-        MT12B.Vertices.Add(PMIC11);
-        MT12B.Vertices.Add(PMITB12);
-        MT12B.Vertices.Add(PMIC12);
-        MT12B.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT12B);
-        // Mesh Bottom 1 Back
-        Mesh MB11B = new Mesh();
-        MB11B.Vertices.Add(PMIC11);
-        MB11B.Vertices.Add(PMIB12);
-        MB11B.Vertices.Add(PMIB11);
-        MB11B.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MB11B);
-        // Mesh Bottom 2 Back
-        Mesh MB12B = new Mesh();
-        MB12B.Vertices.Add(PMIC11);
-        MB12B.Vertices.Add(PMIC12);
-        MB12B.Vertices.Add(PMIB12);
-        MB12B.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MB12B);
 
-        // Capping Faces
-        // Mesh Top 1 Side
-        Mesh MC11TS = new Mesh();
-        MC11TS.Vertices.Add(PMIC11);
-        MC11TS.Vertices.Add(PMOC11);
-        MC11TS.Vertices.Add(PMITB11);
-        MC11TS.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MC11TS);
-        // Mesh Bottom 1 Side
-        Mesh MC11BS = new Mesh();
-        MC11BS.Vertices.Add(PMIC11);
-        MC11BS.Vertices.Add(PMIB11);
-        MC11BS.Vertices.Add(PMOC11);
-        MC11BS.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MC11BS);
-        // Mesh Top 2 Side
-        Mesh MC12TS = new Mesh();
-        MC12TS.Vertices.Add(PMIC12);
-        MC12TS.Vertices.Add(PMITB12);
-        MC12TS.Vertices.Add(PMOC12);
-        MC12TS.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MC12TS);
-        // Mesh Bottom 2 Side
-        Mesh MC12BS = new Mesh();
-        MC12BS.Vertices.Add(PMIC12);
-        MC12BS.Vertices.Add(PMOC12);
-        MC12BS.Vertices.Add(PMIB12);
-        MC12BS.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MC12BS);
+        //
+        // Line
+        //
 
-        // Top Intersection Triangle
-        // Mesh 1 Side
-        Mesh MT11S = new Mesh();
-        MT11S.Vertices.Add(PMOC12);
-        MT11S.Vertices.Add(PMIC12);
-        MT11S.Vertices.Add(PMIT12);
-        MT11S.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT11S);
-        // Mesh 1 Front Bottom
-        Mesh MT11FB = new Mesh();
-        MT11FB.Vertices.Add(PMOC12);
-        MT11FB.Vertices.Add(PMIT11);
-        MT11FB.Vertices.Add(PMITB12);
-        MT11FB.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT11FB);
-        // Mesh 1 Front Top
-        Mesh MT11FT = new Mesh();
-        MT11FT.Vertices.Add(PMOC12);
-        MT11FT.Vertices.Add(PMIT12);
-        MT11FT.Vertices.Add(PMIT11);
-        MT11FT.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT11FT);
-        // Mesh 1 Rear Bottom
-        Mesh MT11RB = new Mesh();
-        MT11RB.Vertices.Add(PMIC12);
-        MT11RB.Vertices.Add(PMITB12);
-        MT11RB.Vertices.Add(PMIT11);
-        MT11RB.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT11RB);
-        // Mesh 1 Rear Top
-        Mesh MT11RT = new Mesh();
-        MT11RT.Vertices.Add(PMIC12);
-        MT11RT.Vertices.Add(PMIT11);
-        MT11RT.Vertices.Add(PMIT12);
-        MT11RT.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT11RT);
-        // Mesh 1 Bottom
-        Mesh MT11BB = new Mesh();
-        MT11BB.Vertices.Add(PMOC12);
-        MT11BB.Vertices.Add(PMIC12);
-        MT11BB.Vertices.Add(PMITB12);
-        MT11BB.Faces.AddFace(0, 2, 1);
-        lsM_Out.Add(MT11BB);
+        // Outer Center
+        Point3d P11 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
+        Point3d P12 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
+        Point3d P13 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
+        lsP_Out.Add(P11);
+        lsP_Out.Add(P12);
+        lsP_Out.Add(P13);
+        Line L11 = new Line(P11, P12);
+        Line L12 = new Line(P12, P13);
+        lsL_Return.Add(L11);
+        // lsL_Return.Add(L12);
+
+        //
+        // Points
+        //
+
+        // Outer Center (Same as Helix Points)
+        Point3d PMOC11 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
+        Point3d PMOC12 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
+        Point3d PMOC13 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
+        lsP_Out.Add(PMOC11);
+        lsP_Out.Add(PMOC12);
+        lsP_Out.Add(PMOC13);
+        // Inner Center
+        Point3d PMIC11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
+        Point3d PMIC12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
+        Point3d PMIC13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIC11);
+        lsP_Out.Add(PMIC12);
+        lsP_Out.Add(PMIC13);
+        // Inner Top
+        Point3d PMIT11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 1.0 + 0.0 * dSpace);
+        Point3d PMIT12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 1.0 + 0.5 * dSpace);
+        Point3d PMIT13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIT11);
+        lsP_Out.Add(PMIT12);
+        lsP_Out.Add(PMIT13);
+        // Inner Top Before
+        Point3d PMITB11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 2.0 * dAngStpRad), (double) iLine + 1.0 - 1.0 * dSpace);
+        Point3d PMITB12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 1.0 * dAngStpRad), (double) iLine + 1.0 - 0.5 * dSpace);
+        Point3d PMITB13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 0.0 * dAngStpRad), (double) iLine + 1.0 - 0.0 * dSpace);
+        lsP_Out.Add(PMITB11);
+        lsP_Out.Add(PMITB12);
+        lsP_Out.Add(PMITB13);
+        // Inner Bottom
+        Point3d PMIB11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine - 1.0 + 0.0 * dSpace);
+        Point3d PMIB12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine - 1.0 + 0.5 * dSpace);
+        Point3d PMIB13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine - 1.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIB11);
+        lsP_Out.Add(PMIB12);
+        lsP_Out.Add(PMIB13);
+        // Inner Bottom After
+        Point3d PMIBA11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
+        Point3d PMIBA12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 3.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 3.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
+        Point3d PMIBA13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 4.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 4.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIBA11);
+        lsP_Out.Add(PMIBA12);
+        lsP_Out.Add(PMIBA13);
+
+        //
+        // Mesh
+        //
+
+        //
+        // Front Faces
+        //
+
+        // Mesh Top 1
+        Mesh MT11 = new Mesh();
+        MT11.Vertices.Add(PMOC11);
+        MT11.Vertices.Add(PMITB12);
+        MT11.Vertices.Add(PMITB11);
+        MT11.Faces.AddFace(0, 2, 1);
+        lsM_Out.Add(MT11);
+        // Mesh Top 2
+        Mesh MT12 = new Mesh();
+        MT12.Vertices.Add(PMOC11);
+        MT12.Vertices.Add(PMOC12);
+        MT12.Vertices.Add(PMITB12);
+        MT12.Faces.AddFace(0, 2, 1);
+        lsM_Out.Add(MT12);
+        // Mesh Bottom 1
+        Mesh MB11 = new Mesh();
+        MB11.Vertices.Add(PMOC11);
+        MB11.Vertices.Add(PMIB11);
+        MB11.Vertices.Add(PMIB12);
+        MB11.Faces.AddFace(0, 2, 1);
+        lsM_Out.Add(MB11);
+        // Mesh Bottom 2
+        Mesh MB12 = new Mesh();
+        MB12.Vertices.Add(PMOC11);
+        MB12.Vertices.Add(PMIB12);
+        MB12.Vertices.Add(PMOC12);
+        MB12.Faces.AddFace(0, 2, 1);
+        lsM_Out.Add(MB12);
+
+        if (bCap == true)
+        {
+
+          //
+          // Back Face
+          //
+
+          // Mesh Top 1 Back
+          Mesh MT11B = new Mesh();
+          MT11B.Vertices.Add(PMIC11);
+          MT11B.Vertices.Add(PMITB12);
+          MT11B.Vertices.Add(PMITB11);
+          MT11B.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MT11B);
+          // Mesh Top 2 Back
+          Mesh MT12B = new Mesh();
+          MT12B.Vertices.Add(PMIC11);
+          MT12B.Vertices.Add(PMITB12);
+          MT12B.Vertices.Add(PMIC12);
+          MT12B.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MT12B);
+          // Mesh Bottom 1 Back
+          Mesh MB11B = new Mesh();
+          MB11B.Vertices.Add(PMIC11);
+          MB11B.Vertices.Add(PMIB12);
+          MB11B.Vertices.Add(PMIB11);
+          MB11B.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MB11B);
+          // Mesh Bottom 2 Back
+          Mesh MB12B = new Mesh();
+          MB12B.Vertices.Add(PMIC11);
+          MB12B.Vertices.Add(PMIC12);
+          MB12B.Vertices.Add(PMIB12);
+          MB12B.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MB12B);
+
+          //
+          // Capping Faces
+          //
+
+          // Mesh Top 1 Side
+          Mesh MC11TS = new Mesh();
+          MC11TS.Vertices.Add(PMIC11);
+          MC11TS.Vertices.Add(PMOC11);
+          MC11TS.Vertices.Add(PMITB11);
+          MC11TS.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MC11TS);
+          // Mesh Bottom 1 Side
+          Mesh MC11BS = new Mesh();
+          MC11BS.Vertices.Add(PMIC11);
+          MC11BS.Vertices.Add(PMIB11);
+          MC11BS.Vertices.Add(PMOC11);
+          MC11BS.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MC11BS);
+          // Mesh Top 2 Side
+          Mesh MC12TS = new Mesh();
+          MC12TS.Vertices.Add(PMIC12);
+          MC12TS.Vertices.Add(PMITB12);
+          MC12TS.Vertices.Add(PMOC12);
+          MC12TS.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MC12TS);
+          // Mesh Bottom 2 Side
+          Mesh MC12BS = new Mesh();
+          MC12BS.Vertices.Add(PMIC12);
+          MC12BS.Vertices.Add(PMOC12);
+          MC12BS.Vertices.Add(PMIB12);
+          MC12BS.Faces.AddFace(0, 2, 1);
+          lsM_Out.Add(MC12BS);
+
+          //
+          // Top Intersection Triangle
+          //
+
+          if ((iLine + 1 != 2 * iNumV))
+          {
+            List<Mesh> lsMT = new List<Mesh>();
+            // Mesh 1 Side
+            Mesh MT11S = new Mesh();
+            MT11S.Vertices.Add(PMOC12);
+            MT11S.Vertices.Add(PMIC12);
+            MT11S.Vertices.Add(PMIT12);
+            MT11S.Faces.AddFace(0, 2, 1);
+            //lsM_Out.Add(MT11S);
+            lsMT.Add(MT11S);
+            // Mesh 1 Front Bottom
+            Mesh MT11FB = new Mesh();
+            MT11FB.Vertices.Add(PMOC12);
+            MT11FB.Vertices.Add(PMIT11);
+            MT11FB.Vertices.Add(PMITB12);
+            MT11FB.Faces.AddFace(0, 2, 1);
+            //lsM_Out.Add(MT11FB);
+            lsMT.Add(MT11FB);
+            // Mesh 1 Front Top
+            Mesh MT11FT = new Mesh();
+            MT11FT.Vertices.Add(PMOC12);
+            MT11FT.Vertices.Add(PMIT12);
+            MT11FT.Vertices.Add(PMIT11);
+            MT11FT.Faces.AddFace(0, 2, 1);
+            //lsM_Out.Add(MT11FT);
+            lsMT.Add(MT11FT);
+            // Mesh 1 Rear Bottom
+            Mesh MT11RB = new Mesh();
+            MT11RB.Vertices.Add(PMIC12);
+            MT11RB.Vertices.Add(PMITB12);
+            MT11RB.Vertices.Add(PMIT11);
+            MT11RB.Faces.AddFace(0, 2, 1);
+            //lsM_Out.Add(MT11RB);
+            lsMT.Add(MT11RB);
+            // Mesh 1 Rear Top
+            Mesh MT11RT = new Mesh();
+            MT11RT.Vertices.Add(PMIC12);
+            MT11RT.Vertices.Add(PMIT11);
+            MT11RT.Vertices.Add(PMIT12);
+            MT11RT.Faces.AddFace(0, 2, 1);
+            //lsM_Out.Add(MT11RT);
+            lsMT.Add(MT11RT);
+            // Mesh 1 Bottom
+            Mesh MT11BB = new Mesh();
+            MT11BB.Vertices.Add(PMOC12);
+            MT11BB.Vertices.Add(PMIC12);
+            MT11BB.Vertices.Add(PMITB12);
+            MT11BB.Faces.AddFace(0, 2, 1);
+            //lsM_Out.Add(MT11BB);
+
+            //
+            // Combine Faces to a Mesh and Add to List
+            //
+
+            lsMT.Add(MT11BB);
+            Mesh MJT = new Mesh();
+            MJT.Append(lsMT);
+            MJT.UnifyNormals();
+            lsM_Out.Add(MJT);
+            lsMT.Clear();
+
+          }
+        }
+
+        //
+        // Combine Meshes and Add to List
+        //
+
+        Mesh MJ = new Mesh();
+        MJ.Append(lsM_Out);
+        //MJ.UnifyNormals();
+        lsM_Out.Clear();
+        lsM_Out.Add(MJ);
+
       }
-
-      // Join Mesh
-      Mesh MJ = new Mesh();
-      MJ.Append(lsM_Out);
-      MJ.UnifyNormals();
-      lsM_Out.Clear();
-      lsM_Out.Add(MJ);
     }
 
-      //
-      // Bottom End
-      //
-    else if ( (iType == 4)
+    else if (
+      (iType == 4)
       || (iType == 9)
       || (iType == 10)
       || (iType == 14)
-      || ((iType == 2) && (iLine == 0)))
+      || ((iType == 2) && (iLine == 0))
+      || ((iType == 3) && (iLine + 1 == 2 * iNumV))
+      )
     {
-      // Line
-      // Outer Center (Helix Points)
-      Point3d P11 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
-      Point3d P12 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
-      Point3d P13 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
-      lsP_Out.Add(P11);
-      lsP_Out.Add(P12);
-      lsP_Out.Add(P12);
-      Line L11 = new Line(P11, P12);
-      Line L12 = new Line(P12, P13);
-      //lsL_Return.Add(L11);
-      lsL_Return.Add(L12);
 
-      // Mesh
-      // Outer Center (Same as Helix Points)
-      Point3d PMOC11 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
-      Point3d PMOC12 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
-      Point3d PMOC13 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
-      lsP_Out.Add(PMOC11);
-      lsP_Out.Add(PMOC12);
-      lsP_Out.Add(PMOC13);
-      // Inner Center
-      Point3d PMIC11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
-      Point3d PMIC12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
-      Point3d PMIC13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIC11);
-      lsP_Out.Add(PMIC12);
-      lsP_Out.Add(PMIC13);
-      // Inner Top
-      Point3d PMIT11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 1.0 + 0.0 * dSpace);
-      Point3d PMIT12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 1.0 + 0.5 * dSpace);
-      Point3d PMIT13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIT11);
-      lsP_Out.Add(PMIT12);
-      lsP_Out.Add(PMIT13);
-      // Inner Top Before
-      Point3d PMITB11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 2.0 * dAngStpRad), (double) iLine + 1.0 - 1.0 * dSpace);
-      Point3d PMITB12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 1.0 * dAngStpRad), (double) iLine + 1.0 - 0.5 * dSpace);
-      Point3d PMITB13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 0.0 * dAngStpRad), (double) iLine + 1.0 - 0.0 * dSpace);
-      lsP_Out.Add(PMITB11);
-      lsP_Out.Add(PMITB12);
-      lsP_Out.Add(PMITB13);
-      // Inner Bottom
-      Point3d PMIB11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine - 1.0 + 0.0 * dSpace);
-      Point3d PMIB12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine - 1.0 + 0.5 * dSpace);
-      Point3d PMIB13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine - 1.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIB11);
-      lsP_Out.Add(PMIB12);
-      lsP_Out.Add(PMIB13);
-      // Inner Bottom After
-      Point3d PMIBA11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
-      Point3d PMIBA12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 3.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 3.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
-      Point3d PMIBA13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 4.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 4.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
-      lsP_Out.Add(PMIBA11);
-      lsP_Out.Add(PMIBA12);
-      lsP_Out.Add(PMIBA13);
+      //
+      // Bottom Segments
+      //
 
-      // Mesh Top 1
-      Mesh MT11 = new Mesh();
-      MT11.Vertices.Add(PMOC12);
-      MT11.Vertices.Add(PMOC13);
-      MT11.Vertices.Add(PMITB13);
-      MT11.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MT11);
-      // Mesh Bottom 1
-      Mesh MB11 = new Mesh();
-      MB11.Vertices.Add(PMOC12);
-      MB11.Vertices.Add(PMIB13);
-      MB11.Vertices.Add(PMOC13);
-      MB11.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MB11);
-      // Mesh Top 0
-      Mesh MT10 = new Mesh();
-      MT10.Vertices.Add(PMIC11);
-      MT10.Vertices.Add(PMOC12);
-      MT10.Vertices.Add(PMIT11);
-      MT10.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MT10);
-      // Mesh Bottom 0
-      Mesh MB10 = new Mesh();
-      MB10.Vertices.Add(PMIC11);
-      MB10.Vertices.Add(PMIB13);
-      MB10.Vertices.Add(PMOC12);
-      MB10.Faces.AddFace(0, 1, 2);
-      lsM_Out.Add(MB10);
-
-      if (bCap == true)
+      if (bBottom == true)
       {
-        // Mesh Top 0 Back
-        Mesh MT10B = new Mesh();
-        MT10B.Vertices.Add(PMIC11);
-        MT10B.Vertices.Add(PMIT11);
-        MT10B.Vertices.Add(PMIC12);
-        MT10B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT10B);
 
-        // Mesh Top 1 Back
-        Mesh MT11B = new Mesh();
-        MT11B.Vertices.Add(PMIC12);
-        MT11B.Vertices.Add(PMIC13);
-        MT11B.Vertices.Add(PMIT11);
-        MT11B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT11B);
+        //
+        // Line
+        //
 
-        // Mesh Bottom 0 Back
-        Mesh MB10B = new Mesh();
-        MB10B.Vertices.Add(PMIC12);
-        MB10B.Vertices.Add(PMIB13);
-        MB10B.Vertices.Add(PMIC11);
-        MB10B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MB10B);
+        // Outer Center (Helix Points)
+        Point3d P11 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
+        Point3d P12 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
+        Point3d P13 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
+        lsP_Out.Add(P11);
+        lsP_Out.Add(P12);
+        lsP_Out.Add(P12);
+        Line L11 = new Line(P11, P12);
+        Line L12 = new Line(P12, P13);
+        //lsL_Return.Add(L11);
+        lsL_Return.Add(L12);
 
-        // Mesh Bottom 1 Back
-        Mesh MB11B = new Mesh();
-        MB11B.Vertices.Add(PMIC12);
-        MB11B.Vertices.Add(PMIC13);
-        MB11B.Vertices.Add(PMIB13);
-        MB11B.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MB11B);
+        //
+        // Points
+        //
 
-        // Capping Faces
+        // Outer Center (Same as Helix Points)
+        Point3d PMOC11 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 * dSpace);
+        Point3d PMOC12 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.5 * dSpace);
+        Point3d PMOC13 = new Point3d(dR2 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR2 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 * dSpace);
+        lsP_Out.Add(PMOC11);
+        lsP_Out.Add(PMOC12);
+        lsP_Out.Add(PMOC13);
+        // Inner Center
+        Point3d PMIC11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
+        Point3d PMIC12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
+        Point3d PMIC13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIC11);
+        lsP_Out.Add(PMIC12);
+        lsP_Out.Add(PMIC13);
+        // Inner Top
+        Point3d PMIT11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine + 1.0 + 0.0 * dSpace);
+        Point3d PMIT12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine + 1.0 + 0.5 * dSpace);
+        Point3d PMIT13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 1.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIT11);
+        lsP_Out.Add(PMIT12);
+        lsP_Out.Add(PMIT13);
+        // Inner Top Before
+        Point3d PMITB11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 2.0 * dAngStpRad), (double) iLine + 1.0 - 1.0 * dSpace);
+        Point3d PMITB12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 1.0 * dAngStpRad), (double) iLine + 1.0 - 0.5 * dSpace);
+        Point3d PMITB13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad - 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad - 0.0 * dAngStpRad), (double) iLine + 1.0 - 0.0 * dSpace);
+        lsP_Out.Add(PMITB11);
+        lsP_Out.Add(PMITB12);
+        lsP_Out.Add(PMITB13);
+        // Inner Bottom
+        Point3d PMIB11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 0.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 0.0 * dAngStpRad), (double) iLine - 1.0 + 0.0 * dSpace);
+        Point3d PMIB12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 1.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 1.0 * dAngStpRad), (double) iLine - 1.0 + 0.5 * dSpace);
+        Point3d PMIB13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine - 1.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIB11);
+        lsP_Out.Add(PMIB12);
+        lsP_Out.Add(PMIB13);
+        // Inner Bottom After
+        Point3d PMIBA11 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 2.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 2.0 * dAngStpRad), (double) iLine + 0.0 + 0.0 * dSpace);
+        Point3d PMIBA12 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 3.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 3.0 * dAngStpRad), (double) iLine + 0.0 + 0.5 * dSpace);
+        Point3d PMIBA13 = new Point3d(dR1 * Math.Sin(1.0 * dAngPosRad + 4.0 * dAngStpRad), dR1 * Math.Cos(1.0 * dAngPosRad + 4.0 * dAngStpRad), (double) iLine + 0.0 + 1.0 * dSpace);
+        lsP_Out.Add(PMIBA11);
+        lsP_Out.Add(PMIBA12);
+        lsP_Out.Add(PMIBA13);
 
-        // Mesh Top 1 Side
-        Mesh MT11S = new Mesh();
-        MT11S.Vertices.Add(PMOC13);
-        MT11S.Vertices.Add(PMIC13);
-        MT11S.Vertices.Add(PMIT11);
-        MT11S.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MT11S);
+        //
+        // Mesh
+        //
 
-        // Mesh Bottom 1 Side
-        Mesh MB11S = new Mesh();
-        MB11S.Vertices.Add(PMOC13);
-        MB11S.Vertices.Add(PMIB13);
-        MB11S.Vertices.Add(PMIC13);
-        MB11S.Faces.AddFace(0, 1, 2);
-        lsM_Out.Add(MB11S);
+        //
+        // Front Faces
+        //
+
+        // Mesh Top 1
+        Mesh MT11 = new Mesh();
+        MT11.Vertices.Add(PMOC12);
+        MT11.Vertices.Add(PMOC13);
+        MT11.Vertices.Add(PMITB13);
+        MT11.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MT11);
+        // Mesh Bottom 1
+        Mesh MB11 = new Mesh();
+        MB11.Vertices.Add(PMOC12);
+        MB11.Vertices.Add(PMIB13);
+        MB11.Vertices.Add(PMOC13);
+        MB11.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MB11);
+        // Mesh Top 0
+        Mesh MT10 = new Mesh();
+        MT10.Vertices.Add(PMIC11);
+        MT10.Vertices.Add(PMOC12);
+        MT10.Vertices.Add(PMIT11);
+        MT10.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MT10);
+        // Mesh Bottom 0
+        Mesh MB10 = new Mesh();
+        MB10.Vertices.Add(PMIC11);
+        MB10.Vertices.Add(PMIB13);
+        MB10.Vertices.Add(PMOC12);
+        MB10.Faces.AddFace(0, 1, 2);
+        lsM_Out.Add(MB10);
 
 
+        if (bCap == true)
+        {
+
+          //
+          // Back Faces
+          //
+
+          // Mesh Top 0 Back
+          Mesh MT10B = new Mesh();
+          MT10B.Vertices.Add(PMIC11);
+          MT10B.Vertices.Add(PMIT11);
+          MT10B.Vertices.Add(PMIC12);
+          MT10B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MT10B);
+          // Mesh Top 1 Back
+          Mesh MT11B = new Mesh();
+          MT11B.Vertices.Add(PMIC12);
+          MT11B.Vertices.Add(PMIC13);
+          MT11B.Vertices.Add(PMIT11);
+          MT11B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MT11B);
+          // Mesh Bottom 0 Back
+          Mesh MB10B = new Mesh();
+          MB10B.Vertices.Add(PMIC12);
+          MB10B.Vertices.Add(PMIB13);
+          MB10B.Vertices.Add(PMIC11);
+          MB10B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MB10B);
+          // Mesh Bottom 1 Back
+          Mesh MB11B = new Mesh();
+          MB11B.Vertices.Add(PMIC12);
+          MB11B.Vertices.Add(PMIC13);
+          MB11B.Vertices.Add(PMIB13);
+          MB11B.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MB11B);
+
+          //
+          // Capping Faces
+          //
+
+          // Mesh Top 1 Side
+          Mesh MT11S = new Mesh();
+          MT11S.Vertices.Add(PMOC13);
+          MT11S.Vertices.Add(PMIC13);
+          MT11S.Vertices.Add(PMIT11);
+          MT11S.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MT11S);
+          // Mesh Bottom 1 Side
+          Mesh MB11S = new Mesh();
+          MB11S.Vertices.Add(PMOC13);
+          MB11S.Vertices.Add(PMIB13);
+          MB11S.Vertices.Add(PMIC13);
+          MB11S.Faces.AddFace(0, 1, 2);
+          lsM_Out.Add(MB11S);
+
+        }
+
+        //
+        // Combine Meshes and Add to List
+        //
+
+        Mesh MJ = new Mesh();
+        MJ.Append(lsM_Out);
+        MJ.UnifyNormals();
+        lsM_Out.Clear();
+        lsM_Out.Add(MJ);
+
+        //
+        // Gap Fillling Block
+        //
+
+        if ((bCap == true) && (iLine != 0))
+        {
+          List<Mesh> lsMF = new List<Mesh>();
+          //  Mesh Top
+          Mesh MF11T = new Mesh();
+          MF11T.Vertices.Add(PMOC12);
+          MF11T.Vertices.Add(PMIB13);
+          MF11T.Vertices.Add(PMIC11);
+          MF11T.Faces.AddFace(0, 1, 2);
+          lsMF.Add(MF11T);
+          //  Mesh Front
+          Mesh MF11F = new Mesh();
+          MF11F.Vertices.Add(PMOC12);
+          MF11F.Vertices.Add(PMIC11);
+          MF11F.Vertices.Add(PMIB12);
+          MF11F.Faces.AddFace(0, 1, 2);
+          lsMF.Add(MF11F);
+          //  Mesh Bottom
+          Mesh MF11B = new Mesh();
+          MF11B.Vertices.Add(PMOC12);
+          MF11B.Vertices.Add(PMIB12);
+          MF11B.Vertices.Add(PMIB13);
+          MF11B.Faces.AddFace(0, 1, 2);
+          lsMF.Add(MF11B);
+          //  Mesh Rear
+          Mesh MF11R = new Mesh();
+          MF11R.Vertices.Add(PMIC11);
+          MF11R.Vertices.Add(PMIB12);
+          MF11R.Vertices.Add(PMIB13);
+          MF11R.Faces.AddFace(0, 1, 2);
+          lsMF.Add(MF11R);
+
+          //
+          // Combine Meshes and Add to List
+          //
+
+          Mesh MFJ = new Mesh();
+          MFJ.Append(lsMF);
+          MFJ.UnifyNormals();
+          lsM_Out.Add(MFJ);
+          lsMF.Clear();
+
+          //
+          // Test Block
+          //
+          // Mesh Top
+          Mesh MF22T = new Mesh();
+          MF22T.Vertices.Add(PMOC12);
+          MF22T.Vertices.Add(PMITB12);
+          MF22T.Vertices.Add(PMITB13);
+          MF22T.Faces.AddFace(0, 1, 2);
+          lsMF.Add(MF22T);
+          // Mesh Bottom
+          Mesh MF22B = new Mesh();
+          MF22B.Vertices.Add(PMOC12);
+          MF22B.Vertices.Add(PMIC11);
+          MF22B.Vertices.Add(PMITB12);
+          MF22B.Faces.AddFace(0, 1, 2);
+          lsMF.Add(MF22B);
+          // Mesh Side
+          Mesh MF22S = new Mesh();
+          MF22S.Vertices.Add(PMOC12);
+          MF22S.Vertices.Add(PMITB13);
+          MF22S.Vertices.Add(PMIC11);
+          MF22S.Faces.AddFace(0, 1, 2);
+          lsMF.Add(MF22S);
+          // Mesh Rear
+          Mesh MF22R = new Mesh();
+          MF22R.Vertices.Add(PMIC11);
+          MF22R.Vertices.Add(PMITB13);
+          MF22R.Vertices.Add(PMITB12);
+          MF22R.Faces.AddFace(0, 1, 2);
+          lsMF.Add(MF22R);
+
+          //
+          // Combine Meshes and Add to List
+          //
+
+          Mesh MFT = new Mesh();
+          MFT.Append(lsMF);
+          MFT.UnifyNormals();
+          lsM_Out.Add(MFT);
+          lsMF.Clear();
+
+        }
       }
-
-      // Join Meshes
-      Mesh MJ = new Mesh();
-      MJ.Append(lsM_Out);
-      MJ.UnifyNormals();
-      lsM_Out.Clear();
-      lsM_Out.Add(MJ);
-
-      // Fillling Block
-      if ((bCap == true) && (iLine != 0))
-      {
-        List<Mesh> lsMF = new List<Mesh>();
-        //  Mesh Top
-        Mesh MF11T = new Mesh();
-        MF11T.Vertices.Add(PMOC12);
-        MF11T.Vertices.Add(PMIB13);
-        MF11T.Vertices.Add(PMIC11);
-        MF11T.Faces.AddFace(0, 1, 2);
-        lsMF.Add(MF11T);
-        //  Mesh Front
-        Mesh MF11F = new Mesh();
-        MF11F.Vertices.Add(PMOC12);
-        MF11F.Vertices.Add(PMIC11);
-        MF11F.Vertices.Add(PMIB12);
-        MF11F.Faces.AddFace(0, 1, 2);
-        lsMF.Add(MF11F);
-        //  Mesh Bottom
-        Mesh MF11B = new Mesh();
-        MF11B.Vertices.Add(PMOC12);
-        MF11B.Vertices.Add(PMIB12);
-        MF11B.Vertices.Add(PMIB13);
-        MF11B.Faces.AddFace(0, 1, 2);
-        lsMF.Add(MF11B);
-        //  Mesh Rear
-        Mesh MF11R = new Mesh();
-        MF11R.Vertices.Add(PMIC11);
-        MF11R.Vertices.Add(PMIB12);
-        MF11R.Vertices.Add(PMIB13);
-        MF11R.Faces.AddFace(0, 1, 2);
-        lsMF.Add(MF11R);
-        // Join Meshes
-        Mesh MFJ = new Mesh();
-        MFJ.Append(lsMF);
-        MFJ.UnifyNormals();
-        lsM_Out.Add(MFJ);
-        lsMF.Clear();
-      }
-
     }
+
+    //
+    // Output
+    //
 
     lsM = lsM_Out;
     lsP = lsP_Out;
     return lsL_Return;
+
   }
 
   //
